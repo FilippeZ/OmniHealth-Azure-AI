@@ -1,0 +1,231 @@
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "inverse-primary": "#005ac2", "error": "#ffb4ab", "primary-fixed": "#d8e2ff", "on-secondary-container": "#004119", "on-background": "#e0e2e9", "primary": "#adc6ff", "on-surface": "#e0e2e9", "surface-container-lowest": "#0b0e13", "tertiary-fixed-dim": "#ffb95f", "outline": "#8c909f", "secondary-fixed-dim": "#4ae176", "surface-container": "#1c2025", "on-secondary": "#003915", "tertiary-container": "#ca8100", "outline-variant": "#424754", "on-surface-variant": "#c2c6d6", "on-tertiary": "#472a00", "surface-container-highest": "#31353a", "primary-container": "#4d8eff", "surface-variant": "#31353a", "on-primary-fixed": "#001a42", "on-primary-container": "#00285d", "secondary-container": "#00b954", "secondary-fixed": "#6bff8f", "secondary": "#4ae176", "primary-fixed-dim": "#adc6ff", "on-secondary-fixed": "#002109", "on-tertiary-container": "#3e2400", "inverse-on-surface": "#2d3136", "surface-container-low": "#181c20", "on-tertiary-fixed-variant": "#653e00", "on-tertiary-fixed": "#2a1700", "on-error-container": "#ffdad6", "tertiary-fixed": "#ffddb8", "surface": "#101418", "surface-container-high": "#272a2f", "surface-tint": "#adc6ff", "surface-bright": "#36393e", "on-error": "#690005", "error-container": "#93000a", "inverse-surface": "#e0e2e9", "surface-dim": "#101418", "on-primary-fixed-variant": "#004395", "background": "#101418", "on-secondary-fixed-variant": "#005321", "on-primary": "#002e6a", "tertiary": "#ffb95f" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "element-gap": "12px", "component-padding": "24px", "grid-gutter": "24px", "grid-margin": "40px", "section-gap": "80px" }, "fontFamily": { "data-mono": ["JetBrains Mono"], "label-caps": ["JetBrains Mono"], "body-lg": ["Inter"], "headline-md": ["Inter"], "body-sm": ["Inter"], "display-lg": ["Inter"] }, "fontSize": { "data-mono": ["13px", { "lineHeight": "1.4", "fontWeight": "400" }], "label-caps": ["11px", { "lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }], "headline-md": ["24px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "500" }], "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }], "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }] } } } };</script><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/></head><body class="bg-background font-body-sm text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low border-r border-outline-variant/10 z-50 flex flex-col"><div class="h-16 flex items-center px-grid-margin border-b border-outline-variant/10"><span class="font-display-lg text-[24px] tracking-tighter text-primary">Δομή</span></div><nav class="flex-1 py-component-padding px-element-gap space-y-1" data-active-classes="bg-primary-container text-on-primary-container font-medium ring-1 ring-primary/20"><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all rounded-DEFAULT" data-path="clinical-dashboard" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-label-caps">CLINICAL DASHBOARD</span></a><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all rounded-DEFAULT" data-path="diagnostic-upload" href="#"><span class="material-symbols-outlined text-[20px]">upload_file</span><span class="font-label-caps">DIAGNOSTIC UPLOAD</span></a><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all rounded-DEFAULT" data-path="agent-feeds" href="#"><span class="material-symbols-outlined text-[20px]">clinical_notes</span><span class="font-label-caps">AGENT FEEDS</span></a><a aria-current="page" class="flex items-center gap-3 px-3 py-2 transition-all rounded-DEFAULT bg-primary-container text-on-primary-container font-medium ring-1 ring-primary/20" data-path="patient-history" href="#"><span class="material-symbols-outlined text-[20px]">history</span><span class="font-label-caps">PATIENT HISTORY</span></a><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all rounded-DEFAULT" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span class="font-label-caps">SETTINGS</span></a></nav></aside><div class="pl-64 flex flex-col min-h-screen"><header class="fixed top-0 left-64 right-0 h-16 bg-background/80 backdrop-blur-xl border-b border-outline-variant/10 z-40 flex items-center justify-between px-grid-margin"><div class="flex items-center gap-grid-gutter flex-1"><div class="relative w-full max-w-md"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span><input class="w-full bg-surface-container-lowest border border-outline-variant/20 rounded-DEFAULT py-2 pl-10 pr-4 text-data-mono text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="PATIENT ID / DIAGNOSTIC SCAN" type="text"/></div><div class="flex items-center gap-2 px-3 py-1 bg-secondary/10 border border-secondary/20 rounded-full"><div class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></div><span class="text-[10px] font-label-caps text-secondary">OPERATIONAL</span></div></div><div class="flex items-center gap-component-padding"><div class="text-right"><div class="font-label-caps text-on-surface">DR. ARIS</div><div class="text-[10px] text-on-surface-variant font-data-mono">NEURO-SURGEON</div></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="flex-1 pt-16"><div class="flex flex-col w-full h-[calc(100vh-104px)]">
+<!-- Top Control Bar -->
+<div class="flex items-center justify-between px-grid-margin py-component-padding border-b border-outline-variant/10 bg-surface">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">account_tree</span>
+<h1 class="font-display-lg text-headline-md text-on-surface uppercase tracking-tight">Entity Relationship Mapping</h1>
+</div>
+<div class="font-data-mono text-on-surface-variant text-[10px] uppercase">Patient UUID: 8821-449-XRAY • Clinical NLP Engine v4.2</div>
+</div>
+<div class="flex items-center gap-element-gap">
+<div class="flex flex-col items-end">
+<span class="font-label-caps text-on-surface-variant">Active Entities</span>
+<span class="font-data-mono text-primary text-headline-md">142</span>
+</div>
+<div class="h-10 w-[1px] bg-outline-variant/20 mx-4"></div>
+<button class="bg-surface-container-high hover:bg-surface-container-highest text-on-surface px-4 py-2 flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+<span class="font-label-caps text-[10px]">Filter UMLS Types</span>
+</button>
+<button class="bg-primary text-on-primary px-4 py-2 flex items-center gap-2 transition-all shadow-lg shadow-primary/10">
+<span class="material-symbols-outlined text-[18px]">export_notes</span>
+<span class="font-label-caps text-[10px]">Generate Report</span>
+</button>
+</div>
+</div>
+<div class="flex flex-1 min-h-0 overflow-hidden">
+<!-- Main Graph Canvas Area -->
+<div class="flex-1 relative bg-surface-container-lowest overflow-hidden group">
+<!-- Grid Overlay -->
+<div class="absolute inset-0 pointer-events-none opacity-20" style="background-image: radial-gradient(circle, #424754 1px, transparent 1px); background-size: 40px 40px;"></div>
+<!-- Graph Legend (Floating) -->
+<div class="absolute top-6 left-6 z-10 flex flex-col gap-2 bg-surface-container/80 backdrop-blur-md p-4 border border-outline-variant/20">
+<div class="font-label-caps text-[9px] text-on-surface-variant mb-2">Legend</div>
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(173,198,255,0.5)]"></div>
+<span class="font-data-mono text-[10px] text-on-surface uppercase">Diagnoses (T047)</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<span class="font-data-mono text-[10px] text-on-surface uppercase">Medications (T200)</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<span class="font-data-mono text-[10px] text-on-surface uppercase">Symptoms (T184)</span>
+</div>
+</div>
+<!-- Graph Visualization Placeholder (SVG Logic) -->
+<div class="w-full h-full cursor-grab active:cursor-grabbing flex items-center justify-center" id="graph-container">
+<svg class="w-full h-full" id="entity-graph" viewbox="0 0 1000 800">
+<!-- Connection Lines -->
+<g class="lines stroke-outline-variant/30 stroke-[0.5px]">
+<line x1="500" x2="350" y1="400" y2="250"></line>
+<line x1="500" x2="650" y1="400" y2="250"></line>
+<line x1="500" x2="500" y1="400" y2="600"></line>
+<line x1="350" x2="200" y1="250" y2="200"></line>
+<line x1="350" x2="250" y1="250" y2="400"></line>
+<line x1="650" x2="800" y1="250" y2="280"></line>
+</g>
+<!-- Central Node -->
+<g class="node-group cursor-pointer" onclick="selectNode('N0', 'Hypertension', 'C0020538', 'Persistent high blood pressure in the systemic arteries.', 'Patient presents with consistent readings &gt;140/90.')">
+<circle class="fill-primary animate-pulse" cx="500" cy="400" r="12"></circle>
+<circle class="fill-none stroke-primary/20 stroke-1" cx="500" cy="400" r="24"></circle>
+<text class="fill-on-surface font-label-caps text-[12px]" text-anchor="middle" x="500" y="440">HYPERTENSION</text>
+</g>
+<!-- Branch Nodes -->
+<g class="node-group cursor-pointer" onclick="selectNode('N1', 'Lisinopril', 'C0065374', 'An ACE inhibitor used to treat high blood pressure and heart failure.', 'Medication list updated 2023-11-12.')">
+<circle class="fill-secondary" cx="350" cy="250" r="8"></circle>
+<text class="fill-on-surface-variant font-data-mono text-[10px]" text-anchor="middle" x="350" y="230">LISINOPRIL</text>
+</g>
+<g class="node-group cursor-pointer" onclick="selectNode('N2', 'Dizziness', 'C0012833', 'A sensation of spinning around and losing ones balance.', 'Chief complaint during Tuesday visit.')">
+<circle class="fill-tertiary" cx="650" cy="250" r="8"></circle>
+<text class="fill-on-surface-variant font-data-mono text-[10px]" text-anchor="middle" x="650" y="230">DIZZINESS</text>
+</g>
+<g class="node-group cursor-pointer" onclick="selectNode('N3', 'Myocardial Infarction', 'C0027051', 'Necrosis of the myocardium as a result of interruption of the blood supply.', 'Family history indicates paternal occurrence at age 52.')">
+<circle class="fill-primary/50" cx="500" cy="600" r="8"></circle>
+<text class="fill-on-surface-variant font-data-mono text-[10px]" text-anchor="middle" x="500" y="630">MI RISK</text>
+</g>
+<g class="node-group cursor-pointer" onclick="selectNode('N4', 'Renal Function', 'C1522230', 'The physiological capacity of the kidneys to filter blood.', 'Creatinine levels within normal parameters.')">
+<circle class="fill-outline" cx="250" cy="400" r="6"></circle>
+<text class="fill-on-surface-variant font-data-mono text-[10px]" text-anchor="end" x="230" y="405">RENAL FUNC</text>
+</g>
+</svg>
+</div>
+<!-- Zoom Controls -->
+<div class="absolute bottom-6 right-6 flex flex-col gap-1">
+<button class="w-10 h-10 bg-surface-container border border-outline-variant/20 text-on-surface flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="w-10 h-10 bg-surface-container border border-outline-variant/20 text-on-surface flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">remove</span>
+</button>
+</div>
+</div>
+<!-- Right Sidebar: Details Panel -->
+<aside class="w-96 bg-surface border-l border-outline-variant/10 flex flex-col translate-x-0 transition-transform duration-500" id="details-panel">
+<div class="p-grid-margin border-b border-outline-variant/10 flex justify-between items-center bg-surface-container-low">
+<div class="font-label-caps text-on-surface tracking-widest">Entity Details</div>
+<div class="flex items-center gap-2" id="selection-status">
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+<span class="text-[10px] font-data-mono text-on-surface-variant">SELECTED</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-grid-margin space-y-element-gap">
+<!-- Initial State / Empty State -->
+<div class="hidden" id="empty-state">
+<div class="h-64 flex flex-col items-center justify-center text-center opacity-40">
+<span class="material-symbols-outlined text-[48px] mb-4">touch_app</span>
+<p class="font-body-sm">Select a node to inspect clinical context and UMLS definitions.</p>
+</div>
+</div>
+<!-- Node Content -->
+<div class="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300" id="node-content">
+<section>
+<div class="font-label-caps text-[10px] text-primary mb-2">UMLS CONCEPT NAME</div>
+<h2 class="font-display-lg text-headline-md text-on-surface mb-1" id="node-title">Hypertension</h2>
+<div class="font-data-mono text-[12px] text-on-surface-variant px-2 py-1 bg-surface-container w-fit" id="node-id">CUI: C0020538</div>
+</section>
+<section class="space-y-4">
+<div>
+<div class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase">Clinical Definition</div>
+<p class="font-body-sm text-on-surface leading-relaxed" id="node-definition">
+                Persistent high blood pressure in the systemic arteries. If untreated, it can lead to health conditions, such as heart disease and stroke.
+              </p>
+</div>
+<div class="p-4 bg-surface-container-highest/30 border-l-2 border-primary">
+<div class="font-label-caps text-[10px] text-primary mb-2 uppercase">Source Context (NLP Extracted)</div>
+<blockquote class="font-data-mono text-body-sm text-on-surface-variant italic" id="node-context">
+                "Patient presents with consistent readings &gt;140/90 during three consecutive outpatient evaluations."
+              </blockquote>
+</div>
+</section>
+<section>
+<div class="font-label-caps text-[10px] text-on-surface-variant mb-3 uppercase">Related Semantic Types</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container text-on-surface text-[10px] font-data-mono border border-outline-variant/10">T047 | Disease or Syndrome</span>
+<span class="px-2 py-1 bg-surface-container text-on-surface text-[10px] font-data-mono border border-outline-variant/10">T033 | Finding</span>
+</div>
+</section>
+<section>
+<div class="font-label-caps text-[10px] text-on-surface-variant mb-3 uppercase">Confidence Scoring</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center mb-1">
+<span class="font-data-mono text-[10px]">Entity Matching</span>
+<span class="font-data-mono text-[10px] text-primary">98.4%</span>
+</div>
+<div class="w-full h-1 bg-surface-container">
+<div class="h-full bg-primary w-[98.4%]"></div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<div class="p-grid-margin border-t border-outline-variant/10">
+<button class="w-full py-3 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-caps text-[11px] flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+          CONFIRM ANNOTATION
+        </button>
+</div>
+</aside>
+</div>
+<!-- Footnote Metadata -->
+<div class="px-grid-margin py-2 border-t border-outline-variant/10 bg-surface-container-lowest flex items-center justify-between">
+<div class="flex gap-4">
+<div class="flex items-center gap-2 text-[10px] font-data-mono text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> 
+        UMLS Metathesaurus 2024AA
+      </div>
+<div class="flex items-center gap-2 text-[10px] font-data-mono text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-primary"></span> 
+        SNOMED-CT Mapping Active
+      </div>
+</div>
+<div class="text-[10px] font-data-mono text-on-surface-variant/50">
+      Graph Density: 0.42 • Nodes: 142 • Edges: 289
+    </div>
+</div>
+</div>
+<script>
+  function selectNode(id, title, cui, def, context) {
+    // Visual Feedback on Node
+    const groups = document.querySelectorAll('.node-group');
+    groups.forEach(g => {
+        g.classList.remove('opacity-100');
+        g.classList.add('opacity-40');
+    });
+    
+    // Find clicked node and highlight
+    const event = window.event;
+    const target = event.currentTarget;
+    target.classList.remove('opacity-40');
+    target.classList.add('opacity-100');
+
+    // Update Sidebar
+    document.getElementById('node-title').innerText = title;
+    document.getElementById('node-id').innerText = 'CUI: ' + cui;
+    document.getElementById('node-definition').innerText = def;
+    document.getElementById('node-context').innerText = `"${context}"`;
+
+    // Re-trigger animation
+    const content = document.getElementById('node-content');
+    content.classList.remove('animate-in', 'fade-in', 'slide-in-from-right-4');
+    void content.offsetWidth; // trigger reflow
+    content.classList.add('animate-in', 'fade-in', 'slide-in-from-right-4');
+  }
+
+  // Interactive Graph Panning Simulation (Minimalist)
+  let isDragging = false;
+  let startPos = { x: 0, y: 0 };
+  const graph = document.getElementById('entity-graph');
+  const container = document.getElementById('graph-container');
+
+  container.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startPos = { x: e.clientX, y: e.clientY };
+  });
+
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+
+  container.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - startPos.x;
+    const dy = e.clientY - startPos.y;
+    // Note: In a real app we'd manipulate the viewbox or use a library like D3.js
+    // Here we just simulate movement via transform for the aesthetic feel
+    graph.style.transform = `translate(${dx/5}px, ${dy/5}px)`;
+  });
+</script></main><footer class="h-10 border-t border-outline-variant/10 bg-surface-container-lowest flex items-center justify-between px-grid-margin"><div class="flex items-center gap-grid-gutter text-data-mono text-[10px] text-on-surface-variant"><span>V1.0.4-MEDICAL</span><span class="flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">timer</span> 14ms LATENCY</span></div><div class="flex items-center gap-grid-gutter"><span class="text-[10px] font-label-caps px-2 py-0.5 border border-outline-variant/30 text-on-surface-variant">HIPAA COMPLIANT</span><span class="text-[10px] font-label-caps text-on-surface-variant">SYSTEM-LOG: 2024.11.02.04:12</span></div></footer></div></body></html>

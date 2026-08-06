@@ -1,0 +1,25 @@
+name: LegacyRecordsAgent
+id: legacy-records-agent-01
+description: Specialized OCR & document intelligence agent utilizing mistral-ocr-4-0 and Azure AI Content Understanding for extracting clinical history from scanned discharge notes, handwritten prescriptions, and legacy PDFs.
+framework: Microsoft Agent Framework (MAF)
+version: 2.0.0
+
+model:
+  provider: mistral_ai / azure_ai_content_understanding
+  model_name: mistral-ocr-4-0
+  fallback_model: mistral-document-ai-2512
+
+permissions:
+  document_ocr: true
+  handwriting_recognition: true
+  layout_parsing: true
+  direct_patient_write: false
+
+system_prompt: |
+  You are the Legacy Records Agent for OmniHealth AI.
+  Your role is to ingest low-quality scanned hospital discharge summaries, handwritten doctor referrals, and legacy medical PDFs.
+  Extract unstructured clinical text, normalize handwriting, parse tabular lab data, and output clean structured JSON containing:
+  - Patient demographics & admission context
+  - Handwritten & printed clinical observations
+  - Historical diagnoses, surgical history, and discharge medications
+  - Key diagnostic findings requiring NLP coding & patient education.

@@ -1,0 +1,197 @@
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "inverse-primary": "#005ac2", "error": "#ffb4ab", "primary-fixed": "#d8e2ff", "on-secondary-container": "#004119", "on-background": "#e0e2e9", "primary": "#adc6ff", "on-surface": "#e0e2e9", "surface-container-lowest": "#0b0e13", "tertiary-fixed-dim": "#ffb95f", "outline": "#8c909f", "secondary-fixed-dim": "#4ae176", "surface-container": "#1c2025", "on-secondary": "#003915", "tertiary-container": "#ca8100", "outline-variant": "#424754", "on-surface-variant": "#c2c6d6", "on-tertiary": "#472a00", "surface-container-highest": "#31353a", "primary-container": "#4d8eff", "surface-variant": "#31353a", "on-primary-fixed": "#001a42", "on-primary-container": "#00285d", "secondary-container": "#00b954", "secondary-fixed": "#6bff8f", "secondary": "#4ae176", "primary-fixed-dim": "#adc6ff", "on-secondary-fixed": "#002109", "on-tertiary-container": "#3e2400", "inverse-on-surface": "#2d3136", "surface-container-low": "#181c20", "on-tertiary-fixed-variant": "#653e00", "on-tertiary-fixed": "#2a1700", "on-error-container": "#ffdad6", "tertiary-fixed": "#ffddb8", "surface": "#101418", "surface-container-high": "#272a2f", "surface-tint": "#adc6ff", "surface-bright": "#36393e", "on-error": "#690005", "error-container": "#93000a", "inverse-surface": "#e0e2e9", "surface-dim": "#101418", "on-primary-fixed-variant": "#004395", "background": "#101418", "on-secondary-fixed-variant": "#005321", "on-primary": "#002e6a", "tertiary": "#ffb95f" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "element-gap": "12px", "component-padding": "24px", "grid-gutter": "24px", "grid-margin": "40px", "section-gap": "80px" }, "fontFamily": { "data-mono": ["JetBrains Mono"], "label-caps": ["JetBrains Mono"], "body-lg": ["Inter"], "headline-md": ["Inter"], "body-sm": ["Inter"], "display-lg": ["Inter"] }, "fontSize": { "data-mono": ["13px", { "lineHeight": "1.4", "fontWeight": "400" }], "label-caps": ["11px", { "lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }], "headline-md": ["24px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "500" }], "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }], "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }] } } } };</script><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/></head><body class="bg-background font-body-sm text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low border-r border-outline-variant/10 z-50 flex flex-col"><div class="h-16 flex items-center px-grid-margin border-b border-outline-variant/10"><span class="font-display-lg text-[24px] tracking-tighter text-primary">Δομή</span></div><nav class="flex-1 py-component-padding px-element-gap space-y-1" data-active-classes="bg-primary-container text-on-primary-container font-medium ring-1 ring-primary/20"><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all rounded-DEFAULT" data-path="clinical-dashboard" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-label-caps">CLINICAL DASHBOARD</span></a><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all rounded-DEFAULT" data-path="diagnostic-upload" href="#"><span class="material-symbols-outlined text-[20px]">upload_file</span><span class="font-label-caps">DIAGNOSTIC UPLOAD</span></a><a aria-current="page" class="flex items-center gap-3 px-3 py-2 transition-all rounded-DEFAULT bg-primary-container text-on-primary-container font-medium ring-1 ring-primary/20" data-path="agent-feeds" href="#"><span class="material-symbols-outlined text-[20px]">clinical_notes</span><span class="font-label-caps">AGENT FEEDS</span></a><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all rounded-DEFAULT" data-path="patient-history" href="#"><span class="material-symbols-outlined text-[20px]">history</span><span class="font-label-caps">PATIENT HISTORY</span></a><a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all rounded-DEFAULT" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span class="font-label-caps">SETTINGS</span></a></nav></aside><div class="pl-64 flex flex-col min-h-screen"><header class="fixed top-0 left-64 right-0 h-16 bg-background/80 backdrop-blur-xl border-b border-outline-variant/10 z-40 flex items-center justify-between px-grid-margin"><div class="flex items-center gap-grid-gutter flex-1"><div class="relative w-full max-w-md"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span><input class="w-full bg-surface-container-lowest border border-outline-variant/20 rounded-DEFAULT py-2 pl-10 pr-4 text-data-mono text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="PATIENT ID / DIAGNOSTIC SCAN" type="text"/></div><div class="flex items-center gap-2 px-3 py-1 bg-secondary/10 border border-secondary/20 rounded-full"><div class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></div><span class="text-[10px] font-label-caps text-secondary">OPERATIONAL</span></div></div><div class="flex items-center gap-component-padding"><div class="text-right"><div class="font-label-caps text-on-surface">DR. ARIS</div><div class="text-[10px] text-on-surface-variant font-data-mono">NEURO-SURGEON</div></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="flex-1 pt-16"><div class="flex flex-col w-full">
+<!-- Status Bar Overlay (Floating) -->
+<div class="px-grid-margin py-element-gap flex justify-between items-end border-b border-outline-variant/10 bg-surface-container-lowest/50 backdrop-blur-md sticky top-0 z-30">
+<div class="flex flex-col">
+<span class="font-label-caps text-primary text-label-caps">CASE VALIDATION PROTOCOL</span>
+<h1 class="font-display-lg text-display-lg text-on-surface">Human-in-the-Loop Review</h1>
+</div>
+<div class="flex items-center gap-grid-gutter pb-1">
+<div class="flex flex-col items-end">
+<span class="font-label-caps text-on-surface-variant text-[10px]">ORCHESTRATOR ID</span>
+<span class="font-data-mono text-data-mono text-on-surface">DELTA-9_PROPOSAL_441</span>
+</div>
+<div class="h-8 w-px bg-outline-variant/20"></div>
+<div class="flex flex-col items-end text-secondary">
+<span class="font-label-caps text-[10px]">SYSTEM STATUS</span>
+<span class="font-data-mono text-data-mono flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] animate-pulse">check_circle</span>
+          READY FOR INPUT
+        </span>
+</div>
+</div>
+</div>
+<div class="flex flex-col px-grid-margin py-section-gap">
+<div class="grid grid-cols-12 gap-grid-gutter items-start">
+<!-- Left Column: Orchestrator Proposal -->
+<div class="col-span-7 flex flex-col gap-grid-gutter">
+<div class="bg-surface-container-low p-component-padding rounded-DEFAULT shadow-xl relative overflow-hidden">
+<!-- Subtle background texture -->
+<div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+<span class="material-symbols-outlined text-[120px]">neurology</span>
+</div>
+<div class="flex items-center justify-between mb-8 border-b border-outline-variant/10 pb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary/10 flex items-center justify-center rounded-full">
+<span class="material-symbols-outlined text-primary">psychology</span>
+</div>
+<div>
+<div class="font-label-caps text-primary text-[10px]">AI ANALYSIS SUMMARY</div>
+<div class="font-headline-md text-headline-md text-on-surface">Lead Orchestrator Findings</div>
+</div>
+</div>
+<div class="text-right">
+<div class="font-label-caps text-on-surface-variant text-[10px]">CONFIDENCE SCORE</div>
+<div class="font-data-mono text-[32px] text-secondary">94.8%</div>
+</div>
+</div>
+<!-- Conditions List -->
+<div class="space-y-element-gap mb-section-gap">
+<div class="bg-surface-container-highest/30 p-element-gap flex items-center justify-between group hover:bg-surface-container-highest transition-colors">
+<div class="flex items-center gap-4">
+<span class="font-data-mono text-on-surface-variant text-label-caps">01.</span>
+<span class="font-body-lg text-on-surface">Bilateral Symmetrical Leukodystrophy</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="w-32 h-1 bg-outline-variant/20 rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[92%]"></div>
+</div>
+<span class="font-data-mono text-secondary text-data-mono">92% MATCH</span>
+</div>
+</div>
+<div class="bg-surface-container-highest/30 p-element-gap flex items-center justify-between group hover:bg-surface-container-highest transition-colors">
+<div class="flex items-center gap-4">
+<span class="font-data-mono text-on-surface-variant text-label-caps">02.</span>
+<span class="font-body-lg text-on-surface">Parietal Lobe Atrophy (Moderate)</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="w-32 h-1 bg-outline-variant/20 rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[88%]"></div>
+</div>
+<span class="font-data-mono text-secondary text-data-mono">88% MATCH</span>
+</div>
+</div>
+<div class="bg-surface-container-highest/30 p-element-gap flex items-center justify-between group hover:bg-surface-container-highest transition-colors">
+<div class="flex items-center gap-4">
+<span class="font-data-mono text-on-surface-variant text-label-caps">03.</span>
+<span class="font-body-lg text-on-surface">Subcortical Micro-hemorrhaging</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="w-32 h-1 bg-outline-variant/20 rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[45%]"></div>
+</div>
+<span class="font-data-mono text-tertiary text-data-mono">45% MATCH</span>
+</div>
+</div>
+</div>
+<!-- Suggested Actionable Plan -->
+<div class="bg-surface-container p-component-padding border-l-2 border-primary">
+<span class="font-label-caps text-primary mb-2 block">RECOMMENDED NEXT STEPS</span>
+<ul class="space-y-2">
+<li class="flex items-start gap-2 text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-[18px] text-primary mt-0.5">arrow_forward</span>
+                Initiate Lumbar Puncture for CSF protein analysis.
+              </li>
+<li class="flex items-start gap-2 text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-[18px] text-primary mt-0.5">arrow_forward</span>
+                Order Genetic Screening for ARSA and GALC gene mutations.
+              </li>
+</ul>
+</div>
+</div>
+<!-- Evidence Visualization -->
+<div class="grid grid-cols-2 gap-grid-gutter">
+<div class="h-48 bg-surface-container-low rounded-DEFAULT overflow-hidden group relative">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="High-resolution axial T2-weighted MRI scan of a human brain showing white matter hyperintensities characteristic of leukodystrophy. The image is presented in a high-contrast clinical interface with medical coordinate overlays and intensity heatmaps in shades of deep blue and electric cyan." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3UZ_NhAsr8mkImj2p3vk9GeCWrJpzDMZWJG7HGe78Ci1ZbrNWCr6IqWrRA9Xgp7Qof2IZIArSksVx5KaJuNc36vG8PTwMZgeYzfHGxIjruLJU4IkA7WoeHF5-9lJaTCI4cQ-niGFJwVZ9ustixxZVZkUbqlpMmwx9HWQs6_nrOWbkNk_-mhloEhhvOH0OcREH7wB_-fB4dtcD4HikRH4ovUdWWpo4JSPMx_coKSCwEbK4yfQoGNVY"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent opacity-60"></div>
+<div class="absolute bottom-3 left-3 flex items-center gap-2">
+<span class="font-label-caps text-[10px] bg-background/80 px-2 py-0.5 backdrop-blur-sm">AXIAL T2-FLAIR</span>
+</div>
+</div>
+<div class="h-48 bg-surface-container-low rounded-DEFAULT overflow-hidden group relative">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="Microscopic pathology slide scan showing glial cell distribution with artificial intelligence overlays marking potential abnormalities. Fluorescent markers highlight specific cell structures in neon green and magenta against a dark cellular background, displayed in a technical diagnostic UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfJQUeMeMprPz43xc8KcnPtFXsBIlQpcd3nMrDXT46LtTVUqbAkqQzqX2tbBJIVQYv5NqHvAyLIs-1NI_OpMqKFuPgXEvpRXCTmLGhjFkZeXGUfZ2xXrOIvlsQWt6pE1t7Uhj2RC0VgPVHnAl1tTwB-Ib5jpT4b9E-mL0xed1LpB1h9kron4KhjdpMxUnmdO2O2BkLsNeDnPa2ydZw7PIUCbE8OwEs4xIhUdx7Y-BOzpEHE3cUBSJ7"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent opacity-60"></div>
+<div class="absolute bottom-3 left-3 flex items-center gap-2">
+<span class="font-label-caps text-[10px] bg-background/80 px-2 py-0.5 backdrop-blur-sm">HISTO-NEURO PATHWAY</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Physician Intervention -->
+<div class="col-span-5 flex flex-col gap-grid-gutter sticky top-24">
+<div class="bg-surface-container-low p-component-padding rounded-DEFAULT shadow-xl border border-outline-variant/10">
+<span class="font-label-caps text-on-surface-variant mb-6 block">CLINICAL INTERVENTION PANEL</span>
+<div class="space-y-6">
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-on-surface text-[11px]">PHYSICIAN OBSERVATIONS</label>
+<textarea class="w-full h-40 bg-background border border-outline-variant/30 rounded-DEFAULT p-4 font-body-sm text-on-surface focus:outline-none focus:border-primary transition-all resize-none" placeholder="Enter validation notes or divergent observations..."></textarea>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between px-4 py-3 bg-surface-container rounded-DEFAULT border border-outline-variant/10">
+<span class="font-body-sm text-on-surface-variant">Override Confidence Level</span>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">remove</span>
+<span class="font-data-mono text-on-surface w-8 text-center">95</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">add</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<input class="w-4 h-4 rounded-sm border-outline-variant accent-primary" id="critical-flag" type="checkbox"/>
+<label class="font-label-caps text-on-surface-variant text-[10px]" for="critical-flag">MARK AS HIGH-PRIORITY URGENT CASE</label>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-element-gap pt-4">
+<button class="w-full py-4 bg-secondary text-on-secondary rounded-DEFAULT font-label-caps flex items-center justify-center gap-2 hover:brightness-110 transition-all shadow-lg active:scale-[0.98]">
+<span class="material-symbols-outlined text-[20px]">task_alt</span>
+                APPROVE &amp; COMMIT TO RECORD
+              </button>
+<button class="w-full py-4 bg-surface-container-highest border border-error/50 text-error rounded-DEFAULT font-label-caps flex items-center justify-center gap-2 hover:bg-error/10 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[20px]">rebase_edit</span>
+                REJECT &amp; RETHINK PROPOSAL
+              </button>
+</div>
+</div>
+</div>
+<!-- Verification Log -->
+<div class="p-component-padding bg-surface-container-lowest/50 rounded-DEFAULT border border-outline-variant/5">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">history</span>
+<span class="font-label-caps text-on-surface-variant text-[10px]">AGENT ACTIVITY LOG</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-[10px] font-data-mono">
+<span class="text-on-surface-variant">04:12:01</span>
+<span class="text-primary">Vision_Agent_v4 analyzed scan series.</span>
+</div>
+<div class="flex justify-between items-center text-[10px] font-data-mono">
+<span class="text-on-surface-variant">04:12:05</span>
+<span class="text-primary">Semantic_Analyzer extracted patient history.</span>
+</div>
+<div class="flex justify-between items-center text-[10px] font-data-mono">
+<span class="text-on-surface-variant">04:12:08</span>
+<span class="text-secondary">Orchestrator synthesized final proposal.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Micro-interaction Scripts -->
+<script>
+    document.querySelectorAll('.group').forEach(item => {
+      item.addEventListener('click', () => {
+        item.classList.toggle('ring-1');
+        item.classList.toggle('ring-primary/40');
+      });
+    });
+
+    const approveBtn = document.querySelector('.bg-secondary');
+    approveBtn.addEventListener('click', () => {
+      approveBtn.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">refresh</span> COMMITTING...';
+      setTimeout(() => {
+        approveBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">check_circle</span> FINALIZED';
+        approveBtn.classList.replace('bg-secondary', 'bg-primary');
+      }, 1500);
+    });
+  </script>
+</div></main><footer class="h-10 border-t border-outline-variant/10 bg-surface-container-lowest flex items-center justify-between px-grid-margin"><div class="flex items-center gap-grid-gutter text-data-mono text-[10px] text-on-surface-variant"><span>V1.0.4-MEDICAL</span><span class="flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">timer</span> 14ms LATENCY</span></div><div class="flex items-center gap-grid-gutter"><span class="text-[10px] font-label-caps px-2 py-0.5 border border-outline-variant/30 text-on-surface-variant">HIPAA COMPLIANT</span><span class="text-[10px] font-label-caps text-on-surface-variant">SYSTEM-LOG: 2024.11.02.04:12</span></div></footer></div></body></html>
