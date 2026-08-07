@@ -404,30 +404,31 @@ class AzureServiceClients:
         clean_text = sanitize_clinical_text(diagnosis_or_prompt)
         low = clean_text.lower()
         if any(k in low for k in ["masticatory", "myalgia", "m79.1", "masseter", "temporalis", "tmj", "jaw", "bruxism"]):
-            prompt = "Create a simple, non-intimidating, flat-vector medical illustration of the human head, jaw, and masseter temporalis masticatory muscles showing myofascial strain areas, suitable for patient education, clean white background."
+            prompt = "Create a simple flat vector medical illustration of the human head, jaw, masseter and temporalis masticatory muscles showing myofascial strain areas, suitable for patient education, clean background color hex #F7FAFC, organ detail color hex #E53E3E, muscle shading color hex #FCA5A5."
             title = "Understanding Masticatory Myalgia & Jaw Muscle Care"
             tag = "MASTICATORY MYALGIA"
         elif "hernia" in low or "spine" in low or "disc" in low or "px-8811" in low:
-            prompt = "Create a simple, non-intimidating, flat-vector medical illustration of a human lumbar spine showing an L5-S1 herniated disc pressing on a nerve root, suitable for patient education, clean white background."
+            prompt = "Create a simple flat vector medical illustration of a human lumbar spine showing an L5-S1 herniated disc pressing on a nerve root, suitable for patient education, background color hex #F7FAFC, nerve color hex #F59E0B, disc detail color hex #E53E3E."
             title = "Understanding Lumbar Disc Herniation (L5-S1 Nerve Compression)"
             tag = "L5-S1 HERNIATION"
         elif "diab" in low or "glucose" in low or "neuropathy" in low or "px-8812" in low:
-            prompt = "Create a simple, non-intimidating, flat-vector medical illustration of peripheral nerve fibers in the foot showing blood flow and glucose impact, suitable for patient education, clean white background."
+            prompt = "Create a simple flat vector medical illustration of peripheral nerve fibers in the foot showing blood flow and glucose impact, suitable for patient education, background color hex #F7FAFC, vascular color hex #3182CE, nerve axon color hex #F59E0B."
             title = "Understanding Type 2 Diabetes & Peripheral Nerve Care"
             tag = "T2D NEUROPATHY"
         elif "copd" in low or "emphysema" in low or "lung" in low or "px-8813" in low:
-            prompt = "Create a simple, non-intimidating, flat-vector medical illustration of human bronchial airways and alveoli showing airflow in COPD emphysema, suitable for patient education, clean white background."
+            prompt = "Create a simple flat vector medical illustration of human bronchial airways and alveoli showing airflow in COPD emphysema, suitable for patient education, background color hex #F7FAFC, pulmonary blue color hex #38BDF8, tissue accent color hex #F97316."
             title = "Understanding COPD & Airway Emphysema"
             tag = "COPD EXACERBATION"
         elif "cad" in low or "angina" in low or "heart" in low or "px-8810" in low:
-            prompt = "Create a simple, non-intimidating, flat-vector medical illustration of a human heart showing a blocked coronary artery, suitable for patient education, clean white background."
+            prompt = "Create a simple flat vector medical illustration of a human heart showing a blocked coronary artery, suitable for patient education, background color hex #F7FAFC, organ detail color hex #E53E3E, vascular blue color hex #3182CE."
             title = "Understanding Coronary Artery Disease & Arterial Blockage"
             tag = "LAD BLOCKAGE (85%)"
         else:
             short_diag = clean_text[:35] if clean_text else "Clinical Evaluation"
-            prompt = f"Create a simple, non-intimidating, flat-vector medical illustration representing {short_diag}, suitable for patient education, clean white background."
+            prompt = f"Create a simple flat vector medical illustration representing {short_diag}, suitable for patient education, background color hex #F7FAFC, organ detail color hex #E53E3E."
             title = f"Understanding {short_diag}"
             tag = "CLINICAL DIAGRAM"
+
 
         # Attempt live Azure AI Foundry FLUX.2-pro API call first
         b64_image = self._call_flux_pro_api(prompt)
