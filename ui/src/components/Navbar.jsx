@@ -1,34 +1,135 @@
-import React from 'react';
-import { Search, Activity, UserCheck } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, Bell, Wifi, Clock } from 'lucide-react';
 
-export default function Navbar({ searchTerm, setSearchTerm }) {
+export default function Navbar({ searchTerm, setSearchTerm, sidebarCollapsed, systemStatus }) {
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const timeStr = currentTime.toLocaleTimeString('en-GB', {
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+  });
+  const dateStr = currentTime.toLocaleDateString('en-GB', {
+    day: '2-digit', month: 'short', year: 'numeric',
+  });
+
+  const leftOffset = sidebarCollapsed ? 'left-20' : 'left-64';
+
   return (
-    <header class="fixed top-0 left-64 right-0 h-16 glass-nav border-b border-slate-200 z-40 flex items-center justify-between px-8 shadow-sm">
-      <div class="flex items-center gap-6 flex-1">
-        <div class="relative w-full max-w-md">
-          <Search class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+    <header
+      className={`fixed top-0 ${leftOffset} right-0 h-16 glass-nav z-40 flex items-center justify-between px-6 transition-all duration-300`}
+    >
+      {/* Search */}
+      <div className="flex items-center gap-4 flex-1 max-w-xl">
+        <div className="relative flex-1">
+          <Search
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5"
+            style={{ color: 'var(--text-faint)' }}
+          />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="PATIENT ID / DIAGNOSTIC SCAN (e.g. #PX-9928)"
-            class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 pl-10 pr-4 text-xs font-mono text-slate-800 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all"
+            placeholder="Search patient ID, name, or record type..."
+            className="clinical-input pl-9 pr-4"
+            style={{ maxWidth: '380px' }}
+            id="patient-search"
           />
         </div>
-        <div class="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200/80 rounded-full">
-          <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-          <span class="text-[10px] font-mono font-bold tracking-wider text-emerald-700">AZURE MAF OPERATIONAL</span>
+
+        {/* Live Status Pill */}
+        <div
+          className="flex items-center gap-2 px-3 py-1.5 rounded-full"
+          style={{
+            background: 'rgba(16,185,129,0.08)',
+            border: '1px solid rgba(16,185,129,0.2)',
+          }}
+        >
+          <div className="live-dot" />
+          <span
+            className="text-[10px] font-bold tracking-widest uppercase"
+            style={{ fontFamily: "'JetBrains Mono'", color: '#34d399' }}
+          >
+            AZURE MAF OPERATIONAL
+          </span>
         </div>
       </div>
 
-      {/* Doctor Profile Info */}
-      <div class="flex items-center gap-4">
-        <div class="text-right">
-          <div class="text-xs font-mono font-bold text-slate-900">DR. ARIS NIKOLAIDIS</div>
-          <div class="text-[10px] text-blue-600 font-mono font-medium">ATTENDING NEURO-SURGEON</div>
+      {/* Right Section */}
+      <div className="flex items-center gap-5">
+        {/* Live Clock */}
+        <div className="text-right">
+          <div
+            className="text-xs font-bold tabular-nums"
+            style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-primary)' }}
+          >
+            {timeStr}
+          </div>
+          <div
+            className="text-[9px] uppercase tracking-wider"
+            style={{ color: 'var(--text-faint)', fontFamily: "'JetBrains Mono'" }}
+          >
+            {dateStr}
+          </div>
         </div>
-        <div class="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-mono font-bold text-xs shadow-sm ring-2 ring-slate-100">
-          AN
+
+        {/* Divider */}
+        <div className="h-8 w-px" style={{ background: 'var(--border)' }} />
+
+        {/* Network status */}
+        <div className="flex items-center gap-1.5">
+          <Wifi className="w-3.5 h-3.5" style={{ color: 'var(--accent-emerald)' }} />
+          <span
+            className="text-[10px] font-bold"
+            style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-muted)' }}
+          >
+            {systemStatus?.response_latency_ms || 142}ms
+          </span>
+        </div>
+
+        {/* Notifications */}
+        <button
+          className="relative w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-105"
+          style={{
+            background: 'rgba(244,63,94,0.1)',
+            border: '1px solid rgba(244,63,94,0.25)',
+          }}
+          id="notifications-btn"
+        >
+          <Bell className="w-3.5 h-3.5" style={{ color: '#fb7185' }} />
+          <span
+            className="absolute -top-1 -right-1 w-4 h-4 rounded-full text-[9px] font-bold flex items-center justify-center"
+            style={{ background: '#f43f5e', color: '#fff', fontFamily: "'JetBrains Mono'" }}
+          >
+            {systemStatus?.critical_events || 3}
+          </span>
+        </button>
+
+        {/* Divider */}
+        <div className="h-8 w-px" style={{ background: 'var(--border)' }} />
+
+        {/* Physician Profile */}
+        <div className="flex items-center gap-3">
+          <div className="text-right hidden sm:block">
+            <div
+              className="text-[11px] font-bold"
+              style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-primary)' }}
+            >
+              DR. ARIS NIKOLAIDIS
+            </div>
+            <div
+              className="text-[9px] uppercase tracking-wider"
+              style={{ fontFamily: "'JetBrains Mono'", color: 'var(--accent-cyan)' }}
+            >
+              LEAD CLINICAL DIAGNOSTICIAN
+            </div>
+          </div>
+          <div className="avatar-ring w-10 h-10" style={{ flexShrink: 0 }}>
+            <div className="avatar-inner">AN</div>
+          </div>
         </div>
       </div>
     </header>

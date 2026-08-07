@@ -1,181 +1,302 @@
 import React, { useState } from 'react';
-import { Upload, CheckCircle2, Play, FileText, Sparkles } from 'lucide-react';
+import { Upload, CheckCircle2, Play, FileText, Sparkles, X, UploadCloud, Stethoscope } from 'lucide-react';
 import { uploadDiagnosticScan } from '../services/api';
+
+const PRESETS = [
+  {
+    id: 'PX-8810', name: 'Nikos Mavros', tag: 'CAD',
+    badge: 'badge-rose',
+    label: 'PX-8810: Coronary Artery Disease',
+    notes: 'PATIENT: Mavros Nikos | AGE: 58 | ADMISSION: 2026-05-14. Clinical summary: Patient presented with exertional angina and shortness of breath. Coronary angiography revealed 85% proximal LAD artery stenosis. Diagnosis: Atherosclerotic Heart Disease (Coronary Artery Disease - CAD).',
+  },
+  {
+    id: 'PX-8811', name: 'Elena Dimou', tag: 'L5-S1',
+    badge: 'badge-purple',
+    label: 'PX-8811: Lumbar Disc Herniation',
+    notes: 'PATIENT: Dimou Elena | AGE: 42. Handwritten referral note: Severe low back pain radiating to left leg (L5 distribution) for 3 weeks. MRI lumbar spine shows L5-S1 herniated disc with nerve root compression.',
+  },
+  {
+    id: 'PX-8812', name: 'Christos Papanikolaou', tag: 'T2D',
+    badge: 'badge-amber',
+    label: 'PX-8812: Type 2 Diabetes Mellitus',
+    notes: 'PATIENT: Papanikolaou Christos | AGE: 65. Scanned lab & outpatient note: HbA1c 8.6%, fasting glucose 192 mg/dL. Distal sensory polyneuropathy symptoms in toes.',
+  },
+  {
+    id: 'PX-8813', name: 'George Vassiliou', tag: 'COPD',
+    badge: 'badge-blue',
+    label: 'PX-8813: COPD Exacerbation',
+    notes: 'PATIENT: Vassiliou George | AGE: 62 | ADMISSION: 2026-07-02. Clinical summary: Progressive exertional dyspnea, chronic productive cough, FEV1/FVC 58%. CT chest shows hyperinflation and bilateral emphysematous bullae. Diagnosis: Chronic Obstructive Pulmonary Disease (COPD - J44.1).',
+  },
+  {
+    id: 'PX-8819', name: 'Eleni Papadaki', tag: 'L4-L5',
+    badge: 'badge-emerald',
+    label: 'PX-8819: Acute L4-L5 Disc Extrusion',
+    notes: 'PATIENT: Papadaki Eleni | AGE: 36 | ADMISSION: 2026-08-08. Clinical summary: Acute severe lower back pain radiating to right anterior thigh and L4 dermatome after lifting heavy weight. Lumbar MRI demonstrates 7mm L4-L5 disc extrusion with right L4 nerve root compression. Diagnosis: Acute L4-L5 Lumbar Disc Extrusion with Radiculopathy (M51.16).',
+  },
+  {
+    id: 'PX-8888', name: 'Filippos-Paraskevas Zygouris', tag: 'MYALGIA',
+    badge: 'badge-cyan',
+    label: 'PX-8888: Masticatory Myalgia',
+    notes: 'PATIENT: Zygouris Filippos-Paraskevas | AGE: 24 | ADMISSION: 2026-08-07. Primary Diagnosis: Masticatory Myalgia (ICD-10: M79.1). Clinical summary: Localized pain and fatigue in muscles of mastication (masseter and temporalis). Prolonged static posture, high cognitive load, bruxism.',
+  },
+];
 
 export default function DiagnosticUploader({ onScanUploaded }) {
   const [patientId, setPatientId] = useState('PX-8810');
   const [patientName, setPatientName] = useState('Nikos Mavros');
-  const [clinicalNotes, setClinicalNotes] = useState(
-    'PATIENT: Mavros Nikos | AGE: 58 | ADMISSION: 2026-05-14. Clinical summary: Patient presented with exertional angina and shortness of breath. Coronary angiography revealed 85% proximal LAD artery stenosis. Diagnosis: Atherosclerotic Heart Disease (Coronary Artery Disease - CAD).'
-  );
+  const [clinicalNotes, setClinicalNotes] = useState(PRESETS[0].notes);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [activePreset, setActivePreset] = useState('PX-8810');
 
-  const handlePreset = (id, name, notes) => {
-    setPatientId(id);
-    setPatientName(name);
-    setClinicalNotes(notes);
+  const handlePreset = (p) => {
+    setPatientId(p.id);
+    setPatientName(p.name);
+    setClinicalNotes(p.notes);
+    setActivePreset(p.id);
+    setUploadSuccess(false);
   };
 
   const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
-    }
+    if (e.target.files?.[0]) setSelectedFile(e.target.files[0]);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files?.[0]) setSelectedFile(e.dataTransfer.files[0]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
       const formData = new FormData();
       formData.append('patient_id', patientId);
       formData.append('patient_name', patientName);
       formData.append('clinical_notes', clinicalNotes);
-      if (selectedFile) {
-        formData.append('file', selectedFile);
-      }
+      if (selectedFile) formData.append('file', selectedFile);
 
       await uploadDiagnosticScan(formData);
       setUploadSuccess(true);
-      setTimeout(() => {
-        onScanUploaded(patientId);
-      }, 800);
+      setTimeout(() => onScanUploaded(patientId), 700);
     } catch (err) {
       console.error(err);
-      alert('Failed to upload scan');
+      alert('Failed to upload diagnostic record. Please check the backend connection.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div class="max-w-4xl mx-auto space-y-6">
-      <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm space-y-6">
-        <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
-          <div class="p-3 rounded-xl bg-blue-50 text-blue-600 border border-blue-100">
-            <Upload class="w-6 h-6" />
+    <div className="space-y-6 max-w-4xl mx-auto">
+      {/* Centered Page Header */}
+      <div className="animate-fade-in-down text-center max-w-xl mx-auto space-y-1.5">
+        <h1
+          className="text-xl font-bold flex items-center justify-center gap-2"
+          style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-primary)' }}
+        >
+          <Stethoscope className="w-5 h-5" style={{ color: 'var(--accent-blue)' }} />
+          DIAGNOSTIC SCAN & DOCUMENT INGESTION
+        </h1>
+        <p className="text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+          Upload scanned hospital discharge PDFs, handwritten referral notes, or clinical lab reports for AI document digitization and patient education visual synthesis.
+        </p>
+      </div>
+
+      <div className="space-y-5">
+        {/* Centered Sample Presets Selector */}
+        <div className="glass-card p-5 animate-slide-in-up text-center">
+          <div
+            className="text-[10px] font-bold uppercase tracking-widest mb-3.5 flex items-center justify-center gap-2"
+            style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-muted)' }}
+          >
+            <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--accent-blue)' }} />
+            SAMPLE CLINICAL CASE PRESETS (CLICK TO LOAD)
           </div>
-          <div>
-            <h2 class="text-sm font-mono font-bold text-slate-900 uppercase tracking-wider">
-              LEGACY DOCUMENT DIGITIZATION & PATIENT ILLUSTRATION SYNTHESIS (MAF)
-            </h2>
-            <p class="text-xs text-slate-500 font-medium">
-              Upload scanned hospital discharge PDFs, handwritten doctor referrals, or legacy medical records for Multi-Agent OCR Synthesis & Patient Illustration (FLUX.2-pro).
-            </p>
+          <div className="flex flex-wrap justify-center gap-2.5">
+            {PRESETS.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => handlePreset(p)}
+                className="btn-ghost transition-all duration-200 hover:scale-105"
+                style={{
+                  padding: '8px 14px',
+                  fontSize: '11px',
+                  ...(activePreset === p.id
+                    ? {
+                        background: 'rgba(59,130,246,0.15)',
+                        borderColor: 'rgba(59,130,246,0.45)',
+                        color: 'var(--accent-blue)',
+                        boxShadow: '0 0 15px rgba(59,130,246,0.15)',
+                      }
+                    : {}),
+                }}
+                id={`preset-${p.id}`}
+              >
+                <span className={`badge ${p.badge}`} style={{ fontSize: '9px', padding: '2px 6px' }}>
+                  {p.tag}
+                </span>
+                {p.label}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Quick Sample Clinical Cases */}
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
-          <span class="text-[11px] font-mono font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
-            <Sparkles class="w-3.5 h-3.5 text-blue-600" /> SAMPLE LEGACY CLINICAL RECORD PRESETS
-          </span>
-          <div class="flex flex-wrap gap-2 pt-1">
-            <button
-              type="button"
-              onClick={() => handlePreset('PX-8810', 'Nikos Mavros', 'PATIENT: Mavros Nikos | AGE: 58 | ADMISSION: 2026-05-14. Clinical summary: Patient presented with exertional angina and shortness of breath. Coronary angiography revealed 85% proximal LAD artery stenosis. Diagnosis: Atherosclerotic Heart Disease (Coronary Artery Disease - CAD).')}
-              class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-mono font-medium text-slate-700 hover:border-blue-500 hover:text-blue-600 transition-all shadow-2xs"
-            >
-              PX-8810: Coronary Artery Disease (Scanned Discharge Summary PDF / CAD)
-            </button>
-            <button
-              type="button"
-              onClick={() => handlePreset('PX-8811', 'Elena Dimou', 'PATIENT: Dimou Elena | AGE: 42. Handwritten referral note: Severe low back pain radiating to left leg (L5 distribution) for 3 weeks. MRI lumbar spine shows L5-S1 herniated disc with nerve root compression.')}
-              class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-mono font-medium text-slate-700 hover:border-blue-500 hover:text-blue-600 transition-all shadow-2xs"
-            >
-              PX-8811: Lumbar Disc Herniation (Handwritten Referral Note)
-            </button>
-            <button
-              type="button"
-              onClick={() => handlePreset('PX-8812', 'Christos Papanikolaou', 'PATIENT: Papanikolaou Christos | AGE: 65. Scanned lab & outpatient note: HbA1c 8.6%, fasting glucose 192 mg/dL. Distal sensory polyneuropathy symptoms in toes.')}
-              class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-mono font-medium text-slate-700 hover:border-blue-500 hover:text-blue-600 transition-all shadow-2xs"
-            >
-              PX-8812: Type 2 Diabetes Mellitus (Scanned Lab & Clinical Report)
-            </button>
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit} class="space-y-6">
-          {/* Metadata Grid */}
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-[11px] font-mono font-bold text-slate-700 uppercase mb-1.5">PATIENT ID</label>
+        {/* Centered Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Patient ID + Name */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-slide-in-up" style={{ animationDelay: '100ms' }}>
+            <div className="glass-card p-4">
+              <label
+                className="block text-[10px] font-bold uppercase tracking-widest mb-2"
+                style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-muted)' }}
+              >
+                PATIENT ID / RECORD CODE
+              </label>
               <input
                 type="text"
                 value={patientId}
                 onChange={(e) => setPatientId(e.target.value)}
                 required
-                class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs font-mono text-slate-900 focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all"
+                className="clinical-input"
+                id="patient-id-input"
               />
             </div>
-            <div>
-              <label class="block text-[11px] font-mono font-bold text-slate-700 uppercase mb-1.5">PATIENT FULL NAME</label>
+            <div className="glass-card p-4">
+              <label
+                className="block text-[10px] font-bold uppercase tracking-widest mb-2"
+                style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-muted)' }}
+              >
+                PATIENT FULL NAME
+              </label>
               <input
                 type="text"
                 value={patientName}
                 onChange={(e) => setPatientName(e.target.value)}
                 required
-                class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs font-mono text-slate-900 focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all"
+                className="clinical-input"
+                id="patient-name-input"
               />
             </div>
           </div>
 
-          {/* File Dropzone */}
-          <div>
-            <label class="block text-[11px] font-mono font-bold text-slate-700 uppercase mb-1.5">
-              SCANNED MEDICAL DOCUMENT / HANDWRITTEN REFERRAL NOTE (PDF, PNG, JPG)
+          {/* Centered Drag & Drop Zone */}
+          <div
+            className="glass-card p-5 animate-slide-in-up text-center"
+            style={{ animationDelay: '150ms' }}
+          >
+            <label
+              className="block text-[10px] font-bold uppercase tracking-widest mb-3"
+              style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-muted)' }}
+            >
+              SCANNED CLINICAL DOCUMENT FILE (PDF, PNG, JPG, TIFF)
             </label>
-            <div class="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center bg-slate-50/50 hover:bg-slate-50 hover:border-blue-500 transition-all cursor-pointer relative group">
+            <div
+              className={`dropzone relative ${isDragging ? 'dragging' : ''}`}
+              style={{ padding: '36px 24px', borderRadius: '16px' }}
+              onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+              onDragLeave={() => setIsDragging(false)}
+              onDrop={handleDrop}
+            >
               <input
                 type="file"
                 accept="image/*,.pdf"
                 onChange={handleFileChange}
-                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                id="file-upload-input"
               />
-              <Upload class="w-8 h-8 text-blue-600 mx-auto mb-2 group-hover:scale-110 transition-transform" />
-              <p class="text-xs font-mono font-semibold text-slate-800">
-                {selectedFile ? selectedFile.name : 'Drag & drop scanned PDF or handwritten note here, or click to browse'}
-              </p>
-              <p class="text-[10px] font-mono text-slate-400 mt-1">
-                Supported Formats: PDF, PNG, JPG, TIFF — Powered by Mistral OCR 4.0 & Azure AI Content Understanding
-              </p>
+              <div className="text-center pointer-events-none">
+                {selectedFile ? (
+                  <div className="flex items-center justify-center gap-3 animate-fade-in">
+                    <FileText className="w-8 h-8" style={{ color: 'var(--accent-blue)' }} />
+                    <div className="text-left">
+                      <div
+                        className="text-sm font-bold"
+                        style={{ color: 'var(--text-primary)', fontFamily: "'JetBrains Mono'" }}
+                      >
+                        {selectedFile.name}
+                      </div>
+                      <div className="text-xs font-semibold" style={{ color: 'var(--accent-emerald)' }}>
+                        {(selectedFile.size / 1024).toFixed(1)} KB · Medical Document Loaded & Ready for Processing
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <UploadCloud
+                      className="w-12 h-12 mx-auto mb-3 animate-float"
+                      style={{ color: 'rgba(59,130,246,0.6)' }}
+                    />
+                    <p
+                      className="text-sm font-semibold"
+                      style={{ color: 'var(--text-primary)', fontFamily: "'JetBrains Mono'" }}
+                    >
+                      Drag & drop scanned medical document here
+                    </p>
+                    <p
+                      className="text-xs mt-1.5"
+                      style={{ color: 'var(--text-faint)' }}
+                    >
+                      or click to browse files · AI Optical Document Digitization Engine
+                    </p>
+                  </>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Clinical Notes */}
-          <div>
-            <label class="block text-[11px] font-mono font-bold text-slate-700 uppercase mb-1.5">
-              DOCUMENT CONTENT / CLINICAL SUMMARY NOTES
+          {/* Clinical Notes Summary Input */}
+          <div
+            className="glass-card p-5 animate-slide-in-up"
+            style={{ animationDelay: '200ms' }}
+          >
+            <label
+              className="block text-[10px] font-bold uppercase tracking-widest mb-3"
+              style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-muted)' }}
+            >
+              DOCUMENT SUMMARY / CLINICAL NOTES TEXT <span style={{ color: 'var(--text-faint)' }}>(OPTIONAL IF PDF SCAN IS UPLOADED)</span>
             </label>
             <textarea
               rows={4}
               value={clinicalNotes}
               onChange={(e) => setClinicalNotes(e.target.value)}
-              required
-              class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3.5 text-xs font-mono text-slate-900 focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all"
-              placeholder="Enter discharge notes or handwritten clinical referral text..."
+              className="clinical-input"
+              style={{ resize: 'vertical' }}
+              placeholder="Enter discharge notes, handwritten clinical referral text, or leave empty if uploading a PDF file for automatic AI structuring..."
+              id="clinical-notes-textarea"
             />
           </div>
 
-          {/* Action Button */}
-          <div class="pt-2">
+          {/* Centered Doctor Submit Button */}
+          <div className="animate-slide-in-up text-center pt-2" style={{ animationDelay: '250ms' }}>
             <button
               type="submit"
-              disabled={isSubmitting}
-              class="w-full py-4 px-6 bg-blue-600 text-white font-mono font-bold text-xs uppercase tracking-wider rounded-lg hover:bg-blue-700 transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2"
+              disabled={isSubmitting || uploadSuccess}
+              className="btn-primary flex items-center justify-center mx-auto transition-all duration-300 hover:scale-[1.02]"
+              style={{ width: '100%', maxWidth: '480px', padding: '16px 28px', fontSize: '12px' }}
+              id="submit-diagnosis-btn"
             >
               {isSubmitting ? (
-                <span>INITIALIZING MULTI-AGENT WORKFLOW (MAF)...</span>
+                <>
+                  <span
+                    className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"
+                  />
+                  PROCESSING CLINICAL DOCUMENT...
+                </>
               ) : uploadSuccess ? (
-                <span class="flex items-center gap-2 text-emerald-300">
-                  <CheckCircle2 class="w-4 h-4" /> UPLOAD & DIGITIZATION SUCCESSFUL
-                </span>
+                <>
+                  <CheckCircle2 className="w-4 h-4 mr-2" style={{ color: '#86efac' }} />
+                  DIGITIZATION SUCCESSFUL — REDIRECTING TO SUPERVISORY REVIEW...
+                </>
               ) : (
-                <span class="flex items-center gap-2">
-                  <Play class="w-4 h-4 fill-current" /> START DIAGNOSTIC ANALYSIS (MULTI-AGENT)
-                </span>
+                <>
+                  <Play className="w-4 h-4 fill-current mr-2" />
+                  START CLINICAL DIGITIZATION & PATIENT ILLUSTRATION
+                </>
               )}
             </button>
           </div>

@@ -27,9 +27,10 @@ yarn-debug.log*
 *.swp
 *.swo
 
-# OS
+# OS & Temp
 .DS_Store
 Thumbs.db
+~$*
 
 # Logs
 *.log

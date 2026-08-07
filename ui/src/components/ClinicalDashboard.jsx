@@ -1,238 +1,468 @@
-import React from 'react';
-import { Activity, Zap, Cpu, AlertTriangle, ChevronRight, CheckCircle2, Clock, Plus, ExternalLink } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  Users, CheckCircle2, Clock, AlertTriangle, Plus, ChevronRight,
+  ShieldCheck, FileText, Palette, Stethoscope, Activity, ArrowUpRight,
+  Sparkles, BookOpen
+} from 'lucide-react';
 
-export default function ClinicalDashboard({ patients, systemStatus, onSelectPatient, onNavigateUpload }) {
-  const getProgressBarColor = (status) => {
-    switch (status) {
-      case 'APPROVED':
-        return 'bg-emerald-500';
-      case 'WAITING_APPROVAL':
-      case 'WAITING_PHYSICIAN_APPROVAL':
-        return 'bg-amber-500';
-      default:
-        return 'bg-blue-600 animate-pulse';
-    }
+/* ─── Animated Counter ────────────────────────────── */
+function AnimatedNumber({ value, suffix = '', decimals = 0 }) {
+  const [display, setDisplay] = useState(0);
+  const start = useRef(null);
+  const duration = 1000;
+
+  useEffect(() => {
+    start.current = null;
+    const target = parseFloat(value) || 0;
+    const step = (ts) => {
+      if (!start.current) start.current = ts;
+      const progress = Math.min((ts - start.current) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplay((eased * target).toFixed(decimals));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [value]);
+
+  return <span>{display}{suffix}</span>;
+}
+
+/* ─── Status Badges for Doctor ────────────────────── */
+function StatusBadge({ status }) {
+  const configs = {
+    APPROVED: { cls: 'badge-emerald', icon: <CheckCircle2 className="w-3 h-3" />, label: 'APPROVED & SHARED WITH PATIENT' },
+    WAITING_APPROVAL: { cls: 'badge-amber', icon: <Clock className="w-3 h-3" />, label: 'AWAITING PHYSICIAN APPROVAL' },
+    WAITING_PHYSICIAN_APPROVAL: { cls: 'badge-amber', icon: <Clock className="w-3 h-3" />, label: 'AWAITING PHYSICIAN APPROVAL' },
+    PROCESSING: { cls: 'badge-blue', icon: <Activity className="w-3 h-3 animate-spin" />, label: 'AI DIGITIZATION IN PROGRESS' },
   };
+  const cfg = configs[status] || configs.PROCESSING;
+  return (
+    <span className={`badge ${cfg.cls} flex items-center gap-1`}>
+      {cfg.icon} {cfg.label}
+    </span>
+  );
+}
 
-  const getProgressPercentage = (p) => {
+/* ─── Progress Bar ────────────────────────────────── */
+function ProgressBar({ pct, status }) {
+  const colorMap = {
+    APPROVED: 'progress-emerald',
+    WAITING_APPROVAL: 'progress-amber',
+    WAITING_PHYSICIAN_APPROVAL: 'progress-amber',
+  };
+  const cls = colorMap[status] || 'progress-blue';
+  return (
+    <div className="flex items-center gap-3">
+      <div className="progress-track flex-1" style={{ maxWidth: 120 }}>
+        <div
+          className={`progress-fill ${cls}`}
+          style={{ width: `${pct}%`, transition: 'width 1s cubic-bezier(0.22,0.61,0.36,1)' }}
+        />
+      </div>
+      <span
+        className="text-xs font-bold tabular-nums"
+        style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-primary)', minWidth: 36 }}
+      >
+        {pct}%
+      </span>
+    </div>
+  );
+}
+
+/* ─── Physician Metric Card ───────────────────────── */
+function PhysicianMetricCard({ color, label, value, suffix, decimals, sub, subLabel, icon: Icon, delay = 0 }) {
+  return (
+    <div
+      className={`metric-card ${color} p-5 animate-slide-in-up`}
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <div className="flex justify-between items-start mb-4">
+        <span
+          className="text-[10px] font-bold uppercase tracking-widest"
+          style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-muted)' }}
+        >
+          {label}
+        </span>
+        <div
+          className="w-8 h-8 rounded-lg flex items-center justify-center"
+          style={{
+            background: `rgba(${
+              color === 'blue' ? '59,130,246' :
+              color === 'emerald' ? '16,185,129' :
+              color === 'amber' ? '245,158,11' : '244,63,94'
+            }, 0.12)`,
+            border: `1px solid rgba(${
+              color === 'blue' ? '59,130,246' :
+              color === 'emerald' ? '16,185,129' :
+              color === 'amber' ? '245,158,11' : '244,63,94'
+            }, 0.2)`,
+          }}
+        >
+          <Icon
+            className="w-4 h-4"
+            style={{
+              color: color === 'blue' ? 'var(--accent-blue)' :
+                     color === 'emerald' ? 'var(--accent-emerald)' :
+                     color === 'amber' ? 'var(--accent-amber)' : 'var(--accent-rose)',
+            }}
+          />
+        </div>
+      </div>
+
+      <div
+        className="text-3xl font-bold tabular-nums mb-1 animate-count-up"
+        style={{
+          fontFamily: "'JetBrains Mono'",
+          color: color === 'blue' ? 'var(--accent-blue)' :
+                 color === 'emerald' ? 'var(--accent-emerald)' :
+                 color === 'amber' ? 'var(--accent-amber)' : 'var(--accent-rose)',
+          animationDelay: `${delay + 200}ms`,
+        }}
+      >
+        <AnimatedNumber value={value} suffix={suffix} decimals={decimals} />
+      </div>
+
+      <div className="mt-3">
+        <div className="progress-track">
+          <div
+            className={`progress-fill progress-${color}`}
+            style={{ width: `${Math.min((parseFloat(value) / (sub || 100)) * 100, 100)}%` }}
+          />
+        </div>
+      </div>
+
+      <div
+        className="mt-3 flex justify-between text-[10px] font-bold uppercase tracking-wider"
+        style={{ fontFamily: "'JetBrains Mono'" }}
+      >
+        <span style={{ color: 'var(--text-faint)' }}>{subLabel?.[0] || ''}</span>
+        <span
+          style={{
+            color: color === 'blue' ? 'var(--accent-blue)' :
+                   color === 'emerald' ? 'var(--accent-emerald)' :
+                   color === 'amber' ? 'var(--accent-amber)' : 'var(--accent-rose)',
+          }}
+        >
+          {subLabel?.[1] || ''}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Doctor Diagnostic Row Item ──────────────────── */
+function getConditionTitle(p) {
+  if (p.diagnosis) return p.diagnosis;
+  if (p.id === 'PX-8810') return 'Coronary Artery Disease (85% LAD Stenosis)';
+  if (p.id === 'PX-8811') return 'Lumbar Disc Herniation (L5-S1 Radiculopathy)';
+  if (p.id === 'PX-8812') return 'Type 2 Diabetes Mellitus with Neuropathy';
+  if (p.id === 'PX-8813') return 'Chronic Obstructive Pulmonary Disease (COPD)';
+  return p.type || 'Legacy Clinical Document Synthesis';
+}
+
+function getPatientName(p) {
+  if (p.name) return p.name;
+  if (p.id === 'PX-8810') return 'Nikos Mavros (58y)';
+  if (p.id === 'PX-8811') return 'Elena Dimou (42y)';
+  if (p.id === 'PX-8812') return 'Christos Papanikolaou (65y)';
+  if (p.id === 'PX-8813') return 'George Vassiliou (62y)';
+  return `Patient #${p.id}`;
+}
+
+export default function ClinicalDashboard({ patients = [], systemStatus, onSelectPatient, onNavigateUpload, isLoading }) {
+  const getProgress = (p) => {
     if (p.status === 'APPROVED') return 100;
     if (p.status === 'WAITING_APPROVAL' || p.status === 'WAITING_PHYSICIAN_APPROVAL') return p.ai_progress || 88;
     return p.ai_progress || 45;
   };
 
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 'APPROVED':
-        return (
-          <span class="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1.5 w-fit">
-            <CheckCircle2 class="w-3.5 h-3.5" /> APPROVED
-          </span>
-        );
-      case 'WAITING_APPROVAL':
-      case 'WAITING_PHYSICIAN_APPROVAL':
-        return (
-          <span class="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1.5 w-fit animate-pulse">
-            <Clock class="w-3.5 h-3.5" /> WAITING PHYSICIAN APPROVAL
-          </span>
-        );
-      default:
-        return (
-          <span class="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1.5 w-fit">
-            <Activity class="w-3.5 h-3.5 animate-spin" /> PROCESSING
-          </span>
-        );
-    }
-  };
+  const pendingApprovalsCount = patients.filter(
+    (p) => p.status === 'WAITING_APPROVAL' || p.status === 'WAITING_PHYSICIAN_APPROVAL'
+  ).length;
+
+  const approvedCount = patients.filter((p) => p.status === 'APPROVED').length;
+
+  const clinicalEngines = [
+    { label: 'Document OCR & Handwriting Ingestion', detail: 'Mistral OCR 4.0 Layout Engine', status: 'READY' },
+    { label: 'Patient Literacy Illustrator Engine', detail: 'FLUX.2-pro Flat-Vector Visuals', status: 'ACTIVE' },
+    { label: 'Clinical Medical Coding (UMLS & ICD-10)', detail: 'Azure Text Analytics for Health', status: 'UMLS CODED' },
+    { label: 'Evidence Guidelines Index (RAG)', detail: 'AHA Cardiovascular & WHO Standards', status: 'INDEXED' },
+    { label: 'EU AI Act Article 14 Safety Guardrails', detail: 'Human Oversight Protocol (HITL)', status: 'ENFORCED' },
+  ];
 
   return (
-    <div class="space-y-6">
-      {/* Metrics Row */}
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {/* Metric 1 */}
-        <div class="bg-white p-5 rounded-xl border border-slate-200 border-l-4 border-l-blue-600 shadow-sm hover:shadow-md transition-all">
-          <div class="flex justify-between items-start mb-3">
-            <span class="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">ACTIVE DIAGNOSES</span>
-            <div class="p-2 rounded-lg bg-blue-50 text-blue-600">
-              <Activity class="w-4 h-4 animate-pulse" />
-            </div>
-          </div>
-          <div class="font-mono text-3xl font-bold text-slate-900">
-            {patients.length}<span class="text-base text-slate-400 font-normal">/20</span>
-          </div>
-          <div class="mt-3 h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-            <div class="h-full bg-blue-600 rounded-full" style={{ width: `${(patients.length / 20) * 100}%` }}></div>
-          </div>
-          <div class="mt-3 text-[10px] font-mono text-slate-500 flex justify-between">
-            <span>SYSTEM LOAD</span>
-            <span class="text-blue-600 font-bold">OPTIMAL</span>
-          </div>
+    <div className="space-y-6">
+      {/* Doctor Overview Header */}
+      <div className="animate-fade-in-down flex items-center justify-between">
+        <div>
+          <h1
+            className="text-lg font-bold flex items-center gap-2.5"
+            style={{ color: 'var(--text-primary)', fontFamily: "'JetBrains Mono'" }}
+          >
+            <Stethoscope className="w-5 h-5" style={{ color: 'var(--accent-blue)' }} />
+            PHYSICIAN CLINICAL DASHBOARD
+          </h1>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+            Real-time overview of active patient consultations, document digitizations, and patient education visual aids.
+          </p>
         </div>
-
-        {/* Metric 2 */}
-        <div class="bg-white p-5 rounded-xl border border-slate-200 border-l-4 border-l-emerald-500 shadow-sm hover:shadow-md transition-all">
-          <div class="flex justify-between items-start mb-3">
-            <span class="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">NEURAL ACCURACY</span>
-            <div class="p-2 rounded-lg bg-emerald-50 text-emerald-600">
-              <Cpu class="w-4 h-4" />
-            </div>
-          </div>
-          <div class="font-mono text-3xl font-bold text-emerald-600">
-            {systemStatus?.neural_accuracy || 99.8}<span class="text-base font-normal">%</span>
-          </div>
-          <div class="mt-3 flex gap-1">
-            <div class="h-1.5 flex-1 bg-emerald-500 rounded-full"></div>
-            <div class="h-1.5 flex-1 bg-emerald-500 rounded-full"></div>
-            <div class="h-1.5 flex-1 bg-emerald-500 rounded-full"></div>
-            <div class="h-1.5 flex-1 bg-emerald-200 rounded-full"></div>
-          </div>
-          <div class="mt-3 text-[10px] font-mono text-slate-500 flex justify-between">
-            <span>MODEL ERROR</span>
-            <span class="text-emerald-600 font-bold">&lt;0.02%</span>
-          </div>
-        </div>
-
-        {/* Metric 3 */}
-        <div class="bg-white p-5 rounded-xl border border-slate-200 border-l-4 border-l-amber-500 shadow-sm hover:shadow-md transition-all">
-          <div class="flex justify-between items-start mb-3">
-            <span class="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">RESPONSE TIME</span>
-            <div class="p-2 rounded-lg bg-amber-50 text-amber-600">
-              <Zap class="w-4 h-4" />
-            </div>
-          </div>
-          <div class="font-mono text-3xl font-bold text-amber-600">
-            {systemStatus?.response_latency_ms || 142}<span class="text-base font-normal">ms</span>
-          </div>
-          <div class="mt-3 flex items-end gap-1 h-2">
-            <div class="w-2 bg-amber-200 h-1 rounded-sm"></div>
-            <div class="w-2 bg-amber-400 h-1.5 rounded-sm"></div>
-            <div class="w-2 bg-amber-500 h-2 rounded-sm"></div>
-            <div class="w-2 bg-amber-200 h-1 rounded-sm"></div>
-          </div>
-          <div class="mt-3 text-[10px] font-mono text-slate-500 flex justify-between">
-            <span>LATENCY</span>
-            <span class="text-amber-600 font-bold">STABLE</span>
-          </div>
-        </div>
-
-        {/* Metric 4 */}
-        <div class="bg-white p-5 rounded-xl border border-slate-200 border-l-4 border-l-rose-500 shadow-sm hover:shadow-md transition-all">
-          <div class="flex justify-between items-start mb-3">
-            <span class="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">CRITICAL EVENTS</span>
-            <div class="p-2 rounded-lg bg-rose-50 text-rose-600">
-              <AlertTriangle class="w-4 h-4" />
-            </div>
-          </div>
-          <div class="font-mono text-3xl font-bold text-rose-600">
-            0{systemStatus?.critical_events || 3}
-          </div>
-          <div class="mt-3 flex gap-2">
-            <div class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></div>
-            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
-            <div class="w-2 h-2 rounded-full bg-rose-200"></div>
-          </div>
-          <div class="mt-3 text-[10px] font-mono text-slate-500 flex justify-between">
-            <span>ACTION REQUIRED</span>
-            <span class="text-rose-600 font-bold">HIGH PRIORITY</span>
-          </div>
-        </div>
+        <button
+          onClick={onNavigateUpload}
+          className="btn-primary"
+          id="new-diagnosis-btn"
+        >
+          <Plus className="w-3.5 h-3.5" /> INGEST CLINICAL SCAN
+        </button>
       </div>
 
-      {/* Main Grid Content */}
-      <div class="grid grid-cols-12 gap-6">
-        <div class="col-span-12 lg:col-span-8 space-y-6">
-          {/* Diagnostic Tasks Table */}
-          <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50/50">
-              <div class="flex items-center gap-3">
-                <h2 class="text-xs font-mono font-bold text-slate-900 uppercase tracking-wider">
-                  ACTIVE DIAGNOSTIC TASKS
-                </h2>
+      {/* Physician Metric Cards */}
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+        <PhysicianMetricCard
+          color="blue" label="ACTIVE PATIENT CASES"
+          value={patients.length} suffix="/20"
+          decimals={0} sub={20}
+          subLabel={['CLINIC WORKLOAD', 'NORMAL CAPACITY']}
+          icon={Users} delay={0}
+        />
+        <PhysicianMetricCard
+          color="emerald" label="APPROVED CONSULTATIONS"
+          value={approvedCount || patients.length} suffix="" decimals={0}
+          sub={patients.length || 1}
+          subLabel={['PATIENT LITERACY', 'VISUAL AIDS READY']}
+          icon={CheckCircle2} delay={100}
+        />
+        <PhysicianMetricCard
+          color="amber" label="AWAITING PHYSICIAN REVIEW"
+          value={pendingApprovalsCount} suffix="" decimals={0}
+          sub={patients.length || 1}
+          subLabel={['HITL SUPERVISORY', pendingApprovalsCount > 0 ? 'REVIEW REQUIRED' : 'UP TO DATE']}
+          icon={Clock} delay={200}
+        />
+        <PhysicianMetricCard
+          color="rose" label="SAFETY & AUDIT COMPLIANCE"
+          value="100" suffix="%" decimals={0}
+          sub={100}
+          subLabel={['EU AI ACT ART. 14', 'FULLY COMPLIANT']}
+          icon={ShieldCheck} delay={300}
+        />
+      </div>
+
+      {/* Main Grid */}
+      <div className="grid grid-cols-12 gap-5">
+        {/* Diagnostic Tasks Table for Doctor */}
+        <div className="col-span-12 xl:col-span-8 animate-slide-in-up" style={{ animationDelay: '150ms' }}>
+          <div className="glass-card overflow-hidden">
+            {/* Table Header */}
+            <div
+              className="flex items-center justify-between px-5 py-4"
+              style={{ borderBottom: '1px solid var(--border)' }}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-2 h-2 rounded-full"
+                  style={{ background: 'var(--accent-blue)', boxShadow: '0 0 8px var(--accent-blue)' }}
+                />
+                <span
+                  className="text-xs font-bold uppercase tracking-widest"
+                  style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-primary)' }}
+                >
+                  ACTIVE CLINICAL PATIENT RECORDS
+                </span>
+                <span className="badge badge-blue" style={{ marginLeft: 4 }}>
+                  {patients.length} ACTIVE PATIENTS
+                </span>
               </div>
               <button
                 onClick={onNavigateUpload}
-                class="text-[11px] font-mono font-bold px-3.5 py-2 bg-blue-600 text-white hover:bg-blue-700 transition-all rounded-lg shadow-sm flex items-center gap-1.5"
+                className="btn-primary"
+                style={{ padding: '7px 14px', fontSize: '10px' }}
+                id="table-new-diagnosis-btn"
               >
-                <Plus class="w-3.5 h-3.5" /> NEW DIAGNOSIS
+                <Plus className="w-3 h-3" /> INGEST SCAN
               </button>
             </div>
 
-            <div class="overflow-x-auto">
-              <table class="w-full text-left border-collapse">
+            {/* Clinical Table */}
+            <div className="overflow-x-auto">
+              <table className="w-full clinical-table">
                 <thead>
-                  <tr class="border-b border-slate-200 bg-slate-50/80 text-[10px] font-mono text-slate-500 uppercase tracking-wider">
-                    <th class="px-6 py-3.5">PATIENT ID</th>
-                    <th class="px-6 py-3.5">RECORD TYPE</th>
-                    <th class="px-6 py-3.5">AI PROGRESS</th>
-                    <th class="px-6 py-3.5">STATUS</th>
-                    <th class="px-6 py-3.5 text-right">ACTION</th>
+                  <tr>
+                    {['PATIENT', 'CLINICAL CONDITION', 'RECORD TYPE', 'AI SYNTHESIS', 'STATUS', 'ACTION'].map((h) => (
+                      <th
+                        key={h}
+                        className="px-5 py-3 text-left text-[10px] font-bold uppercase tracking-widest"
+                        style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-faint)' }}
+                      >
+                        {h}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
-                <tbody class="font-mono text-xs divide-y divide-slate-100">
-                  {patients.map((p) => {
-                    const pct = getProgressPercentage(p);
-                    const colorClass = getProgressBarColor(p.status);
-                    return (
-                      <tr
-                        key={p.id}
-                        onClick={() => onSelectPatient(p.id)}
-                        class="hover:bg-blue-50/50 transition-colors cursor-pointer group"
-                      >
-                        <td class="px-6 py-4 text-blue-600 font-bold">{p.id}</td>
-                        <td class="px-6 py-4 text-slate-800 font-medium">{p.type}</td>
-                        <td class="px-6 py-4">
-                          <div class="flex items-center gap-3">
-                            <div class="w-28 h-2 bg-slate-100 rounded-full overflow-hidden shadow-inner">
-                              <div
-                                class={`h-full rounded-full transition-all duration-700 ease-out ${colorClass}`}
-                                style={{ width: `${pct}%` }}
-                              ></div>
-                            </div>
-                            <span class="text-[11px] font-bold text-slate-700">{pct}%</span>
-                          </div>
-                        </td>
-                        <td class="px-6 py-4">{getStatusBadge(p.status)}</td>
-                        <td class="px-6 py-4 text-right">
-                          <span class="text-blue-600 font-bold inline-flex items-center gap-1 text-[11px] group-hover:translate-x-0.5 transition-transform">
-                            VIEW <ChevronRight class="w-3.5 h-3.5" />
-                          </span>
-                        </td>
+                <tbody>
+                  {isLoading ? (
+                    [0, 1, 2].map((i) => (
+                      <tr key={i}>
+                        {[1, 2, 3, 4, 5, 6].map((j) => (
+                          <td key={j} className="px-5 py-4">
+                            <div
+                              className="h-4 rounded"
+                              style={{
+                                background: 'rgba(255,255,255,0.05)',
+                                animation: 'shimmer 1.8s ease-in-out infinite',
+                                width: j === 2 ? '140px' : '80%',
+                              }}
+                            />
+                          </td>
+                        ))}
                       </tr>
-                    );
-                  })}
+                    ))
+                  ) : patients.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="px-5 py-10 text-center">
+                        <span style={{ color: 'var(--text-faint)', fontFamily: "'JetBrains Mono'", fontSize: 12 }}>
+                          NO ACTIVE PATIENT RECORDS
+                        </span>
+                      </td>
+                    </tr>
+                  ) : (
+                    patients.map((p, i) => {
+                      const pct = getProgress(p);
+                      const name = getPatientName(p);
+                      const condition = getConditionTitle(p);
+                      return (
+                        <tr
+                          key={p.id}
+                          onClick={() => onSelectPatient(p.id)}
+                          className="cursor-pointer group"
+                          style={{ animationDelay: `${i * 80}ms` }}
+                        >
+                          <td className="px-5 py-4">
+                            <div className="flex items-center gap-2">
+                              <div
+                                className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                                style={{
+                                  background: p.status === 'APPROVED' ? 'var(--accent-emerald)' :
+                                              p.status === 'PROCESSING' ? 'var(--accent-blue)' : 'var(--accent-amber)',
+                                  boxShadow: `0 0 6px ${p.status === 'APPROVED' ? 'var(--accent-emerald)' : p.status === 'PROCESSING' ? 'var(--accent-blue)' : 'var(--accent-amber)'}`,
+                                }}
+                              />
+                              <div>
+                                <span
+                                  className="text-xs font-bold block"
+                                  style={{ fontFamily: "'JetBrains Mono'", color: 'var(--accent-blue)' }}
+                                >
+                                  {p.id}
+                                </span>
+                                <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>
+                                  {name}
+                                </span>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-5 py-4">
+                            <span
+                              className="text-xs font-semibold block"
+                              style={{ color: 'var(--text-primary)', maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                            >
+                              {condition}
+                            </span>
+                          </td>
+                          <td className="px-5 py-4">
+                            <span
+                              className="text-xs font-medium"
+                              style={{ color: 'var(--text-muted)', maxWidth: 180, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                              title={p.type || p.record_type || 'LEGACY RECORD'}
+                            >
+                              {p.type || p.record_type || 'LEGACY RECORD'}
+                            </span>
+                          </td>
+                          <td className="px-5 py-4">
+                            <ProgressBar pct={pct} status={p.status} />
+                          </td>
+                          <td className="px-5 py-4">
+                            <StatusBadge status={p.status} />
+                          </td>
+                          <td className="px-5 py-4">
+                            <button
+                              className="flex items-center gap-1.5 text-[11px] font-bold transition-all group-hover:gap-2.5"
+                              style={{
+                                fontFamily: "'JetBrains Mono'",
+                                color: 'var(--accent-blue)',
+                                background: 'none', border: 'none', cursor: 'pointer',
+                              }}
+                            >
+                              REVIEW <ArrowUpRight className="w-3.5 h-3.5" />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
 
-        {/* Right Azure Status Column */}
-        <div class="col-span-12 lg:col-span-4 space-y-6">
-          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
-            <h3 class="text-xs font-mono font-bold text-slate-900 uppercase tracking-wider flex items-center justify-between border-b border-slate-100 pb-3">
-              <span>AZURE AI SERVICES STATUS</span>
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            </h3>
+        {/* Right Column: Clinical Engines & Guidelines */}
+        <div className="col-span-12 xl:col-span-4 space-y-4 animate-slide-in-up" style={{ animationDelay: '250ms' }}>
+          {/* Clinical Engines Status */}
+          <div className="glass-card p-5">
+            <div className="section-header">
+              <ShieldCheck className="w-3.5 h-3.5" style={{ color: 'var(--accent-emerald)' }} />
+              <span>CLINICAL AI & SAFETY PIPELINE</span>
+              <div className="ml-auto live-dot" />
+            </div>
+            <div className="space-y-2">
+              {clinicalEngines.map((item, idx) => (
+                <div
+                  key={item.label}
+                  className="p-3 rounded-xl flex items-center justify-between"
+                  style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)' }}
+                >
+                  <div>
+                    <div className="text-xs font-bold" style={{ color: 'var(--text-primary)' }}>
+                      {item.label}
+                    </div>
+                    <div className="text-[10px]" style={{ color: 'var(--text-faint)', fontFamily: "'JetBrains Mono'" }}>
+                      {item.detail}
+                    </div>
+                  </div>
+                  <span className="badge badge-emerald">{item.status}</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
-            <div class="space-y-2.5 font-mono text-xs">
-              <div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-200/80">
-                <span class="text-slate-700 font-medium">Azure AI Foundry (DeepSeek 3.2)</span>
-                <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 font-bold">CONNECTED</span>
+          {/* Clinical Summary & Guidelines */}
+          <div className="glass-card p-5">
+            <div className="section-header">
+              <BookOpen className="w-3.5 h-3.5" style={{ color: 'var(--accent-blue)' }} />
+              <span>CLINICAL PRACTICE STANDARDS</span>
+            </div>
+            <div className="space-y-3 font-mono text-xs">
+              <div
+                className="p-3.5 rounded-xl space-y-1.5"
+                style={{ background: 'rgba(59,130,246,0.05)', border: '1px solid rgba(59,130,246,0.18)' }}
+              >
+                <div className="font-bold flex items-center gap-1.5" style={{ color: 'var(--accent-blue)' }}>
+                  <Sparkles className="w-3.5 h-3.5" /> AHA Patient Literacy Standard
+                </div>
+                <p className="text-[11px] leading-relaxed font-sans" style={{ color: 'var(--text-muted)' }}>
+                  Generated FLUX.2-pro visual diagrams provide non-intimidating, flat-vector anatomical education for patient consultations.
+                </p>
               </div>
-              <div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-200/80">
-                <span class="text-slate-700 font-medium">Mistral OCR 4.0</span>
-                <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 font-bold">READY</span>
-              </div>
-              <div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-200/80">
-                <span class="text-slate-700 font-medium">FLUX.2-pro (Text-to-Image)</span>
-                <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 font-bold">ACTIVE</span>
-              </div>
-              <div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-200/80">
-                <span class="text-slate-700 font-medium">Text Analytics for Health</span>
-                <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 font-bold">UMLS CODED</span>
-              </div>
-              <div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-200/80">
-                <span class="text-slate-700 font-medium">Azure AI Search (AHA RAG)</span>
-                <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 font-bold">INDEXED</span>
+
+              <div
+                className="p-3.5 rounded-xl space-y-1.5"
+                style={{ background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.18)' }}
+              >
+                <div className="font-bold flex items-center gap-1.5" style={{ color: 'var(--accent-emerald)' }}>
+                  <ShieldCheck className="w-3.5 h-3.5" /> EU AI Act Article 14 Guardrails
+                </div>
+                <p className="text-[11px] leading-relaxed font-sans" style={{ color: 'var(--text-muted)' }}>
+                  Mandatory Human-in-the-Loop (HITL) physician approval is enforced before sharing visual aids or educational summaries with patients.
+                </p>
               </div>
             </div>
           </div>

@@ -22,6 +22,16 @@ export const fetchPatients = async () => {
   }
 };
 
+export const fetchPatientHistory = async (patientId) => {
+  try {
+    const res = await axios.get(`${API_BASE_URL}/patient-history?patient_id=${patientId}`);
+    return res.data;
+  } catch (error) {
+    console.error("Failed to fetch patient history", error);
+    return null;
+  }
+};
+
 export const uploadDiagnosticScan = async (formData) => {
   try {
     const res = await axios.post(`${API_BASE_URL}/upload`, formData, {
