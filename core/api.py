@@ -7,6 +7,7 @@ from typing import Dict, Any, Optional, List
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from core.orchestration import maf_orchestrator
@@ -79,6 +80,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Serve generated visual FLUX diagrams statically
+usecase_dir = os.path.join(os.getcwd(), "usecase_outputs")
+os.makedirs(usecase_dir, exist_ok=True)
+app.mount("/usecase_outputs", StaticFiles(directory=usecase_dir), name="usecase_outputs")
+
 
 # -----------------------------------------------------------------------------
 # 1. Pydantic Models & Request Schemas
@@ -841,11 +848,24 @@ async def evaluate_medical_record(request: PatientRecordRequest):
             "High-definition 1024x1024 flat vector graphics."
         ))
 
-        illustration_url = f"/workspace/out/patient_cardiac_chart_{request.record_id}.png"
+        # Save generated visual FLUX image directly into the usecase_outputs project folder
+        b64_img = ill_res.get("b64_json", "")
+        img_filename = f"{request.record_id}_FLUX2_Illustration.png"
+        img_filepath = os.path.join(usecase_dir, img_filename)
+
+        if b64_img:
+            try:
+                with open(img_filepath, "wb") as f:
+                    f.write(base64.b64decode(b64_img))
+            except Exception as e:
+                logger.warning(f"Could not save FLUX image to {img_filepath}: {e}")
+
+        illustration_url = f"/usecase_outputs/{img_filename}"
 
         # Step 5: Safety Control Gate Checkpointing (GDPR Compliance & HITL Check)
         checkpoint_id = f"safety-chk-{request.record_id}"
         await safety_gate_clinical_signoff(orchestrator_summary)
+
 
         # Update in-memory patient database state for immediate React UI visibility
         top_ent = nlp_result.get("entities", [{}])[0] if nlp_result.get("entities") else {}
