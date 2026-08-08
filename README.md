@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="ui/public/logo.jpeg" alt="OmniHealth Azure AI Logo" width="180" style="border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3);" />
+  <img src="ui/public/logo.png" alt="OmniHealth Azure AI Logo" width="340" style="filter: drop-shadow(0 15px 35px rgba(0, 242, 254, 0.4)); margin-bottom: 10px;" />
 
   # 🚀 OmniHealth Azure AI — Multi-Agent Clinical Diagnostic Platform
   ### Production-Grade Architecture & Implementation Blueprint — Version 2.0 (Rocket Flow & 6 Use Cases Edition)
@@ -170,7 +170,7 @@ TREATMENT PLAN: Scheduled laparoscopic sigmoid colectomy with regional lymphaden
 1. **Mistral OCR 4.0**: Markdown extraction of colonoscopy findings, TNM staging (cT3 cN1 cM0), and treatment plan.
 2. **Azure TA4H NLP**: **Diagnosis**: `Colorectal Adenocarcinoma` -> **ICD-10-CM**: **`C18.9`**, **UMLS CUI**: **`C0009375`**. Findings: *Hematochezia* (`R19.4`), *Intestinal Stenosis* (`K63.8`).
 3. **DeepSeek-V3.2 RAG & Education**: AHA/NCCN guideline retrieval and plain-language patient education synthesis.
-4. **FLUX.2-pro Visual Diagram**: Renders 1024x1024 vector diagram of sigmoid colon mass and bowel passage. ([PX-8891_FLUX2_Illustration.png](file:///C:/Users/wwefi/OneDrive/%CE%A5%CF%80%CE%BB%CE%BF%CE%B3%CE%B9%CF%83%CF%84%CE%AE%CF%82/azure-ai/usecase_outputs/PX-8891_FLUX2_Illustration.png))
+4. **FLUX.2-pro Visual Diagram**: Renders 1024x1024 vector diagram of sigmoid colon mass and bowel passage. ([PX-8891_FLUX2_Illustration.png](file:///C:/Users/wwefi/OneDrive/%CE%A5%CF%80%CE%BF%CE%BB%CE%BF%CE%B3%CE%B9%CF%83%CF%84%CE%AE%CF%82/azure-ai/usecase_outputs/PX-8891_FLUX2_Illustration.png))
 5. **Azure Safety Bridge**: Emits HITL Checkpoint `safety-chk-PX-8891` enforcing Article 14 supervision.
 
 ---
@@ -183,12 +183,27 @@ TREATMENT PLAN: Scheduled laparoscopic sigmoid colectomy with regional lymphaden
 | **PX-8891** | **Robert Kensington** | 67y M | Primary Adenocarcinoma of Sigmoid Colon (Stage IIIb) | `C18.9` | `C0009375` | ✅ Generated ([PNG](file:///C:/Users/wwefi/OneDrive/%CE%A5%CF%80%CE%BB%CE%BF%CE%B3%CE%B9%CF%83%CF%84%CE%AE%CF%82/azure-ai/usecase_outputs/PX-8891_FLUX2_Illustration.png)) |
 | **PX-8892** | **Michael Torres** | 44y M | Major Depressive Disorder, Severe, Single Episode | `F32.2` | `C0011581` | ✅ Generated ([PNG](file:///C:/Users/wwefi/OneDrive/%CE%A5%CF%80%CE%BB%CE%BF%CE%B3%CE%B9%CF%83%CF%84%CE%AE%CF%82/azure-ai/usecase_outputs/PX-8892_FLUX2_Illustration.png)) |
 | **PX-8893** | **Elena Papadaki** | 48y F | Invasive Ductal Carcinoma of Left Breast | `C50.9` | `C0006142` | ✅ Generated ([PNG](file:///C:/Users/wwefi/OneDrive/%CE%A5%CF%80%CE%BB%CE%BF%CE%B3%CE%B9%CF%83%CF%84%CE%AE%CF%82/azure-ai/usecase_outputs/PX-8893_FLUX2_Illustration.png)) |
-| **PX-8894** | **Dimitris Kostopoulos** | 62y M | Acute Transmural Anterior Myocardial Infarction (STEMI) | `I21.0` | `C0155626` | ✅ Generated ([PNG](file:///C:/Users/wwefi/OneDrive/%CE%A5%CF%80%CE%BB%CE%BF%CE%BB%CE%B3%CE%B9%CF%83%CF%84%CE%AE%CF%82/azure-ai/usecase_outputs/PX-8894_FLUX2_Illustration.png)) |
+| **PX-8894** | **Dimitris Kostopoulos** | 62y M | Acute Transmural Anterior Myocardial Infarction (STEMI) | `I21.0` | `C0155626` | ✅ Generated ([PNG](file:///C:/Users/wwefi/OneDrive/%CE%A5%CF%80%CE%BB%CE%BF%CE%B3%CE%B9%CF%83%CF%84%CE%AE%CF%82/azure-ai/usecase_outputs/PX-8894_FLUX2_Illustration.png)) |
 | **PX-8895** | **Maria Vassiliou** | 55y F | Acute Ischemic Cerebral Infarction (Left MCA Stroke) | `I63.50` | `C0007780` | ✅ Generated ([PNG](file:///C:/Users/wwefi/OneDrive/%CE%A5%CF%80%CE%BB%CE%BF%CE%B3%CE%B9%CF%83%CF%84%CE%AE%CF%82/azure-ai/usecase_outputs/PX-8895_FLUX2_Illustration.png)) |
 
 ---
 
 ## 🛠️ 7. Backend API Reference (`core/api.py`) & Execution Commands
+
+### Environment Configuration (`.env`)
+```env
+AZURE_OPENAI_ENDPOINT=https://wwefilip56-9387-resource.services.ai.azure.com/api/projects/wwefilip56-9387/agents/myagent/endpoint/protocols/openai/
+AZURE_OPENAI_KEY=<YOUR_AZURE_OPENAI_KEY>
+AZURE_AGENT_ENDPOINT=https://wwefilip56-9387-resource.services.ai.azure.com/api/projects/wwefilip56-9387/agents/myagent/endpoint/protocols/openai/responses?api-version=v1
+AZURE_AI_FOUNDRY_PROJECT_ENDPOINT=https://wwefilip56-9387-resource.services.ai.azure.com/api/projects/wwefilip56-9387
+AZURE_CONTENT_SAFETY_ENDPOINT=https://cs-omnihealth-17e5c.cognitiveservices.azure.com/
+AZURE_CONTENT_SAFETY_KEY=<YOUR_AZURE_CONTENT_SAFETY_KEY>
+AZURE_SEARCH_ENDPOINT=https://search-omnihealth.search.windows.net
+AZURE_SEARCH_KEY=<YOUR_AZURE_SEARCH_KEY>
+AZURE_COSMOS_ENDPOINT=https://cosmos-omnihealth.documents.azure.com:443/
+MISTRAL_OCR_ENDPOINT=https://wwefilip56-9387-resource.services.ai.azure.com/providers/mistral/azure/ocr
+FLUX_PRO_ENDPOINT=https://wwefilip56-9387-resource.services.ai.azure.com/providers/blackforestlabs/v1/flux-2-pro?api-version=preview
+```
 
 ### API Endpoints
 - **`POST /api/upload`**: Primary ingestion endpoint parsing PDF text, mapping TA4H entities, generating FLUX.2-pro diagrams, and synchronizing state.
