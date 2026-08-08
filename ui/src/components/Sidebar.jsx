@@ -1,35 +1,28 @@
 import React from 'react';
 import {
   LayoutDashboard, Upload, Activity, History,
-  ShieldCheck, ChevronLeft, ChevronRight, HeartPulse
+  ShieldCheck, ChevronLeft, ChevronRight, HeartPulse, Radio
 } from 'lucide-react';
 
 const navItems = [
   {
     id: 'dashboard',
     label: 'CLINICAL DASHBOARD',
-    sub: 'Overview & Active Metrics',
+    sub: 'Overview & Intake Panel',
     icon: LayoutDashboard,
     accent: '#3b82f6',
   },
   {
-    id: 'upload',
-    label: 'DIAGNOSTIC UPLOAD',
-    sub: 'OCR Intake & Presets',
-    icon: Upload,
-    accent: '#a855f7',
-  },
-  {
     id: 'hitl',
     label: 'SUPERVISORY HITL',
-    sub: 'Physician Review & Approval',
+    sub: 'EU AI Act Art. 14 Gate',
     icon: ShieldCheck,
     accent: '#f59e0b',
   },
   {
     id: 'patient-history',
-    label: 'PATIENT HISTORY',
-    sub: 'UMLS & Education Graph',
+    label: 'PATIENT EHR CHARTS',
+    sub: 'UMLS Graph & 3D HUD',
     icon: History,
     accent: '#10b981',
   },
@@ -42,23 +35,45 @@ export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollaps
         collapsed ? 'w-20' : 'w-64'
       }`}
     >
+      {/* Floating Border Edge Toggle Button */}
+      <button
+        onClick={() => setCollapsed(!collapsed)}
+        className="absolute -right-3.5 top-5 z-50 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-115 shadow-xl cursor-pointer"
+        style={{
+          background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+          border: '1px solid rgba(56,189,248,0.5)',
+          boxShadow: '0 0 15px rgba(6,182,212,0.35)',
+        }}
+        title={collapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
+        id="sidebar-edge-toggle"
+      >
+        {collapsed ? (
+          <ChevronRight className="w-4 h-4 text-cyan-400" />
+        ) : (
+          <ChevronLeft className="w-4 h-4 text-cyan-400" />
+        )}
+      </button>
+
       {/* Brand */}
       <div
-        className="h-16 flex items-center px-4 gap-3 border-b"
+        onClick={() => setCollapsed(!collapsed)}
+        className="h-14 flex items-center px-4 gap-3 border-b cursor-pointer transition-all hover:bg-white/5"
         style={{ borderColor: 'var(--border)' }}
+        title={collapsed ? 'Click to expand sidebar' : 'Click to collapse sidebar'}
       >
         <div
-          className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center animate-pulse-glow"
+          className="flex-shrink-0 w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center p-0.5 border"
           style={{
-            background: 'linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%)',
-            boxShadow: '0 0 20px rgba(59,130,246,0.4)',
+            background: 'linear-gradient(135deg, rgba(59,130,246,0.2) 0%, rgba(6,182,212,0.2) 100%)',
+            borderColor: 'rgba(56,189,248,0.4)',
+            boxShadow: '0 0 20px rgba(6,182,212,0.3)',
           }}
         >
-          <HeartPulse className="w-5 h-5 text-white" />
+          <img src="/logo.jpeg" alt="OmniHealth AI Logo" className="w-full h-full object-cover rounded-lg" />
         </div>
 
         {!collapsed && (
-          <div className="overflow-hidden animate-fade-in-right">
+          <div className="overflow-hidden animate-fade-in-right flex-1">
             <h1
               className="font-bold text-sm tracking-tight leading-tight"
               style={{ color: 'var(--text-primary)' }}
@@ -148,13 +163,13 @@ export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollaps
       </nav>
 
       {/* Compliance Footer */}
-      {!collapsed && (
-        <div
-          className="p-3 border-t"
-          style={{ borderColor: 'var(--border)' }}
-        >
+      <div
+        className="p-3 border-t"
+        style={{ borderColor: 'var(--border)' }}
+      >
+        {!collapsed ? (
           <div
-            className="rounded-xl p-3 space-y-2"
+            className="rounded-xl p-3 space-y-2 animate-fade-in"
             style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid var(--border)' }}
           >
             <div className="compliance-pill">
@@ -170,23 +185,35 @@ export default function Sidebar({ activeTab, setActiveTab, collapsed, setCollaps
               <span className="badge badge-cyan">ENFORCED</span>
             </div>
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="flex flex-col items-center gap-1.5 py-1 text-[8px] font-mono font-bold">
+            <span className="badge badge-emerald px-1.5 py-0.5" title="EU AI ACT CLASS IIa">EU</span>
+            <span className="badge badge-blue px-1.5 py-0.5" title="MDR AUDIT ACTIVE">MDR</span>
+            <span className="badge badge-cyan px-1.5 py-0.5" title="GDPR ART.9 ENFORCED">GDPR</span>
+          </div>
+        )}
+      </div>
 
-      {/* Collapse Toggle */}
+      {/* Bottom Toggle Bar */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="mx-auto mb-4 w-7 h-7 rounded-full flex items-center justify-center btn-ghost border-0 transition-all hover:scale-110"
+        className="w-full py-2.5 px-3 border-t flex items-center justify-center gap-2 transition-all hover:bg-white/5 cursor-pointer text-[10px] font-mono font-bold"
         style={{
-          background: 'rgba(59,130,246,0.1)',
-          border: '1px solid rgba(59,130,246,0.25)',
+          borderColor: 'var(--border)',
+          color: 'var(--accent-cyan)',
         }}
-        title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        title={collapsed ? 'Expand sidebar navigation' : 'Collapse sidebar navigation'}
+        id="sidebar-bottom-toggle"
       >
         {collapsed ? (
-          <ChevronRight className="w-3.5 h-3.5" style={{ color: 'var(--accent-blue)' }} />
+          <>
+            <ChevronRight className="w-4 h-4 text-cyan-400" />
+          </>
         ) : (
-          <ChevronLeft className="w-3.5 h-3.5" style={{ color: 'var(--accent-blue)' }} />
+          <>
+            <ChevronLeft className="w-4 h-4 text-cyan-400" />
+            <span>COLLAPSE SIDEBAR</span>
+          </>
         )}
       </button>
     </aside>

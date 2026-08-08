@@ -221,8 +221,63 @@ class AzureServiceClients:
 
             combined_str = f"{tag} {title} {prompt}".upper()
 
-            # 1. MASTICATORY MYALGIA / MASSETER / TMJ / JAW / HEAD & NECK
-            if any(k in combined_str for k in ["MASTICATORY", "MYALGIA", "M79.1", "MASSETER", "TEMPORALIS", "TMJ", "JAW", "BRUXISM"]):
+            # 1. AORTIC VALVE STENOSIS (I35.0)
+            if any(k in combined_str for k in ["AORTIC", "I35.0", "VALVE STENOSIS", "CALCIFIC"]):
+                # Aortic Root Outer Ring
+                draw.ellipse([310, 210, 710, 610], fill=(226, 232, 240), outline=(51, 65, 85), width=5)
+                draw.ellipse([340, 240, 680, 580], fill=(239, 68, 68), outline=(153, 27, 27), width=4)
+                # 3 Calcified Valve Leaflets / Cusps (tight orifice)
+                draw.polygon([(512, 410), (370, 310), (450, 480)], fill=(254, 240, 138), outline=(180, 83, 9), width=3)
+                draw.polygon([(512, 410), (654, 310), (574, 480)], fill=(254, 240, 138), outline=(180, 83, 9), width=3)
+                draw.polygon([(512, 410), (410, 550), (614, 550)], fill=(254, 240, 138), outline=(180, 83, 9), width=3)
+                # Stenotic Orifice (narrowed orifice center)
+                draw.ellipse([492, 390, 532, 430], fill=(153, 27, 27), outline=(225, 29, 72), width=2)
+                # Callout box
+                draw.rectangle([40, 520, 310, 640], fill=(254, 226, 226), outline=(225, 29, 72), width=2)
+                draw.line([(310, 580), (492, 410)], fill=(225, 29, 72), width=3)
+                draw.text((52, 535), "CALCIFIC AORTIC STENOSIS (I35.0)", fill=(153, 27, 27), font=font_bold)
+                draw.text((52, 562), "Severe Leaflet Calcification", fill=(185, 28, 28), font=font_sm)
+                draw.text((52, 585), "Narrowed Orifice Area 0.8 cm²", fill=(185, 28, 28), font=font_sm)
+                draw.text((52, 608), "Mean Gradient 42 mmHg", fill=(30, 58, 138), font=font_sm)
+
+            # 2. PULMONARY EMBOLISM (I26.99)
+            elif any(k in combined_str for k in ["PULMONARY EMBOLISM", "PE", "I26.99", "EMBOLUS", "CTPA"]):
+                # Pulmonary Arterial Trunk Lumen Cross-Section
+                draw.ellipse([260, 210, 760, 610], fill=(186, 230, 253), outline=(2, 132, 199), width=5)
+                draw.ellipse([300, 250, 720, 570], fill=(30, 58, 138), outline=(30, 41, 59), width=4)
+                # Acute Thrombus Embolus Clot within lumen
+                draw.ellipse([420, 310, 620, 510], fill=(153, 27, 27), outline=(225, 29, 72), width=4)
+                draw.polygon([(440, 330), (580, 310), (600, 480), (430, 460)], fill=(120, 20, 20), outline=(220, 38, 38), width=3)
+                # Occluded Blood Flow Streams
+                draw.arc([310, 270, 710, 550], 30, 150, fill=(239, 68, 68), width=8)
+                # Callout box
+                draw.rectangle([40, 520, 310, 640], fill=(254, 226, 226), outline=(225, 29, 72), width=2)
+                draw.line([(310, 580), (420, 410)], fill=(225, 29, 72), width=3)
+                draw.text((52, 535), "PULMONARY EMBOLISM (I26.99)", fill=(153, 27, 27), font=font_bold)
+                draw.text((52, 562), "Acute Thrombus Occlusion", fill=(185, 28, 28), font=font_sm)
+                draw.text((52, 585), "Right Pulmonary Artery Defect", fill=(185, 28, 28), font=font_sm)
+                draw.text((52, 608), "Impaired Hemodynamic Flow", fill=(30, 58, 138), font=font_sm)
+
+            # 3. ACUTE APPENDICITIS (K35.80)
+            elif any(k in combined_str for k in ["APPENDICITIS", "K35.80", "APPENDIX", "MCBURNEY"]):
+                # Cecum Tissue & Appendiceal Lumen Cross-Section
+                draw.ellipse([240, 200, 780, 620], fill=(254, 226, 226), outline=(225, 29, 72), width=5)
+                # Tubular Inflamed Appendix
+                draw.polygon([(460, 240), (560, 240), (590, 580), (430, 580)], fill=(239, 68, 68), outline=(153, 27, 27), width=5)
+                draw.ellipse([460, 530, 560, 610], fill=(225, 29, 72), outline=(153, 27, 27), width=4)
+                # Luminal Edema & Periappendiceal Fat Stranding lines
+                for r_x in range(380, 640, 30):
+                    draw.line([(r_x, 300), (r_x + 20, 550)], fill=(245, 158, 11), width=3)
+                # Callout box
+                draw.rectangle([40, 520, 310, 640], fill=(254, 226, 226), outline=(225, 29, 72), width=2)
+                draw.line([(310, 580), (460, 540)], fill=(225, 29, 72), width=3)
+                draw.text((52, 535), "ACUTE APPENDICITIS (K35.80)", fill=(153, 27, 27), font=font_bold)
+                draw.text((52, 562), "Dilated Appendix 9.5 mm", fill=(185, 28, 28), font=font_sm)
+                draw.text((52, 585), "Periappendiceal Fat Stranding", fill=(185, 28, 28), font=font_sm)
+                draw.text((52, 608), "Right Lower Quadrant Focus", fill=(30, 58, 138), font=font_sm)
+
+            # 4. MASTICATORY MYALGIA / MASSETER / TMJ / JAW / HEAD & NECK
+            elif any(k in combined_str for k in ["MASTICATORY", "MYALGIA", "M79.1", "MASSETER", "TEMPORALIS", "TMJ", "JAW", "BRUXISM"]):
                 # Head & Jaw Outline Profile
                 draw.ellipse([340, 180, 680, 560], fill=(241, 245, 249), outline=(51, 65, 85), width=4) # Head contour
                 draw.polygon([(460, 440), (620, 520), (540, 640), (420, 560)], fill=(226, 232, 240), outline=(51, 65, 85), width=4) # Jaw Mandible
@@ -246,7 +301,7 @@ class AzureServiceClients:
                 draw.text((52, 585), "Temporalis Strain & Bruxism", fill=(185, 28, 28), font=font_sm)
                 draw.text((52, 608), "Ergonomic & Soft Diet Protocol", fill=(30, 58, 138), font=font_sm)
 
-            # 2. HEART / CARDIOVASCULAR
+            # 5. HEART / CARDIOVASCULAR
             elif any(k in combined_str for k in ["HEART", "CAD", "LAD", "ANGINA", "CARDIO", "STENOSIS", "BLOCKAGE"]):
                 draw.pieslice([312, 220, 612, 550], 180, 0, fill=(239, 68, 68), outline=(153, 27, 27), width=4)
                 draw.pieslice([412, 220, 712, 550], 180, 0, fill=(239, 68, 68), outline=(153, 27, 27), width=4)
@@ -262,7 +317,7 @@ class AzureServiceClients:
                 draw.text((52, 335), "Coronary Stenosis Area", fill=(185, 28, 28), font=font_sm)
                 draw.text((52, 355), "Arterial Occlusion", fill=(185, 28, 28), font=font_sm)
 
-            # 3. SPINE / LUMBAR / HERNIATION / NEURO
+            # 6. SPINE / LUMBAR / HERNIATION / NEURO
             elif any(k in combined_str for k in ["SPINE", "HERNIA", "LUMBAR", "DISC", "L5-S1", "BACK"]):
                 y_pts = [180, 280, 380, 480, 580]
                 labels = ["L1 Vertebra", "L2 Vertebra", "L3 Vertebra", "L4 Vertebra", "L5 Vertebra"]
@@ -288,7 +343,7 @@ class AzureServiceClients:
                 draw.text((52, 634), "Nerve Root Compression", fill=(185, 28, 28), font=font_sm)
                 draw.text((52, 658), "Radiculopathy Pathway", fill=(185, 28, 28), font=font_sm)
 
-            # 4. DIABETES / NEUROPATHY / VASCULAR
+            # 7. DIABETES / NEUROPATHY / VASCULAR
             elif any(k in combined_str for k in ["DIABETES", "T2D", "NEUROPATHY", "GLUCOSE", "FOOT", "NERVE"]):
                 draw.rectangle([200, 400, 820, 480], fill=(254, 240, 138), outline=(217, 119, 6), width=4)
                 draw.line([(200, 440), (820, 440)], fill=(217, 119, 6), width=10)
@@ -304,7 +359,7 @@ class AzureServiceClients:
                 draw.text((665, 575), "PERIPHERAL NEUROPATHY", fill=(153, 27, 27), font=font_bold)
                 draw.text((665, 602), "Distal Sensory Axon Damage", fill=(185, 28, 28), font=font_sm)
 
-            # 5. LUNGS / COPD / EMPHYSEMA / RESPIRATORY
+            # 8. LUNGS / COPD / EMPHYSEMA / RESPIRATORY
             elif any(k in combined_str for k in ["COPD", "LUNG", "EMPHYSEMA", "PULMONARY", "RESPIRATORY"]):
                 draw.ellipse([260, 220, 460, 580], fill=(186, 230, 253), outline=(2, 132, 199), width=4)
                 draw.ellipse([560, 220, 760, 580], fill=(186, 230, 253), outline=(2, 132, 199), width=4)
@@ -317,18 +372,33 @@ class AzureServiceClients:
                 draw.text((695, 365), "EMPHYSEMATOUS BULLAE", fill=(194, 65, 12), font=font_bold)
                 draw.text((695, 390), "Alveolar Wall Destruction", fill=(194, 65, 12), font=font_bold)
 
-            # 6. BRAIN / NEUROLOGY / HEAD
+            # 9. BRAIN / NEUROLOGY / HEAD
             elif any(k in combined_str for k in ["BRAIN", "NEUROLOGY", "HEAD", "STROKE", "CEREBRAL"]):
                 draw.ellipse([280, 220, 744, 620], fill=(243, 232, 255), outline=(147, 51, 234), width=5)
                 draw.arc([320, 260, 700, 580], 45, 315, fill=(192, 132, 252), width=8)
                 draw.arc([360, 300, 660, 540], 120, 240, fill=(168, 85, 247), width=8)
-                draw.ellipse([460, 580, 560, 740], fill=(216, 180, 254), outline=(126, 34, 206), width=4)
+            # 9. COLORECTAL ADENOCARCINOMA / COLON CANCER (C18.9)
+            elif any(k in combined_str for k in ["COLON", "RECTAL", "COLORECTAL", "INTESTINAL", "BOWEL", "CANCER", "CARCINOMA", "ADENOCARCINOMA", "C18.9", "ΚΑΡΚΙΝ", "ΕΝΤΕΡ"]):
+                # Outer Colon Ring
+                draw.ellipse([260, 210, 760, 610], fill=(254, 205, 211), outline=(225, 29, 72), width=5)
+                draw.ellipse([310, 260, 710, 560], fill=(244, 63, 94), outline=(153, 27, 27), width=4)
+                # Intestinal Lumen Inner Passage
+                draw.ellipse([370, 320, 650, 500], fill=(15, 23, 42), outline=(51, 65, 85), width=3)
+                # Exophytic Colorectal Tumoral Adenocarcinoma Mass inside lumen
+                draw.ellipse([440, 310, 620, 480], fill=(153, 27, 27), outline=(225, 29, 72), width=4)
+                draw.polygon([(460, 320), (600, 310), (590, 470), (450, 460)], fill=(120, 20, 20), outline=(255, 255, 255), width=2)
+                # Neovascularization blood vessels supplying tumor mass
+                draw.line([(512, 210), (512, 330)], fill=(225, 29, 72), width=4)
+                draw.line([(480, 220), (490, 340)], fill=(225, 29, 72), width=3)
+                # Callout Box
+                draw.rectangle([40, 520, 345, 645], fill=(254, 226, 226), outline=(225, 29, 72), width=2)
+                draw.line([(345, 580), (480, 410)], fill=(225, 29, 72), width=3)
+                draw.text((52, 535), "COLORECTAL ADENOCARCINOMA (C18.9)", fill=(153, 27, 27), font=font_bold)
+                draw.text((52, 562), "Exophytic Intestinal Tumor Mass (3.4 cm)", fill=(185, 28, 28), font=font_sm)
+                draw.text((52, 585), "Colon Lumen Stenosis & Mucosal Invasion", fill=(185, 28, 28), font=font_sm)
+                draw.text((52, 608), "UMLS C0009375 · CEA Level 18.4 ng/mL", fill=(30, 58, 138), font=font_sm)
 
-                draw.rectangle([50, 300, 270, 385], fill=(254, 226, 226), outline=(225, 29, 72), width=2)
-                draw.text((62, 315), "NEUROLOGICAL EVALUATION", fill=(153, 27, 27), font=font_bold)
-                draw.text((62, 340), "Cerebral Cortex Region", fill=(185, 28, 28), font=font_sm)
-
-            # 7. GENERAL HUMAN ANATOMICAL TORSO & ORGAN CANVAS
+            # 10. GENERAL HUMAN ANATOMICAL TORSO & ORGAN CANVAS
             else:
                 draw.polygon([(360, 200), (664, 200), (740, 780), (280, 780)], fill=(226, 232, 240), outline=(71, 85, 105), width=4)
                 draw.ellipse([430, 90, 594, 210], fill=(226, 232, 240), outline=(71, 85, 105), width=3)
@@ -349,11 +419,11 @@ class AzureServiceClients:
             draw.text((70, 895), "CLINICAL ACTION: Visual aid generated for physician-guided patient consultation under EU AI Act Art. 14.", fill=(30, 58, 138), font=font_bold)
             draw.text((70, 925), "POWERED BY FLUX.2-PRO / MICROSOFT AGENT FRAMEWORK (MAF)", fill=(147, 51, 234), font=font_bold)
 
-            buf = io.BytesIO()
-            img.save(buf, format="PNG")
-            return base64.b64encode(buf.getvalue()).decode("utf-8")
+            buffered = io.BytesIO()
+            img.save(buffered, format="PNG")
+            return base64.b64encode(buffered.getvalue()).decode("utf-8")
         except Exception as e:
-            logger.error(f"Canvas render failed: {e}")
+            logger.error(f"Failed to render canvas illustration: {e}")
             return ""
 
     def _call_flux_pro_api(self, prompt: str) -> Optional[str]:
@@ -403,30 +473,46 @@ class AzureServiceClients:
         """Runs Medical Illustrator Agent (FLUX.2-pro Text-to-Image)."""
         clean_text = sanitize_clinical_text(diagnosis_or_prompt)
         low = clean_text.lower()
-        if any(k in low for k in ["masticatory", "myalgia", "m79.1", "masseter", "temporalis", "tmj", "jaw", "bruxism"]):
-            prompt = "Create a simple flat vector medical illustration of the human head, jaw, masseter and temporalis masticatory muscles showing myofascial strain areas, suitable for patient education, clean background color hex #F7FAFC, organ detail color hex #E53E3E, muscle shading color hex #FCA5A5."
-            title = "Understanding Masticatory Myalgia & Jaw Muscle Care"
+        if any(k in low for k in ["aortic", "i35.0", "valve stenosis", "calcific"]):
+            prompt = "Macro anatomical cross-section focusing exclusively on the human aortic valve showing calcified cusp regions. Clean minimalist flat vector art, precise biological geometry, pastel tones, primary background color #F7FAFC, calcification detail color #E53E3E. Pure visual diagram, label-free, typography-free, alphabet-free vector shapes, solid graphic contours."
+            title = "Macro Cross-Section: Aortic Valve Calcific Stenosis"
+            tag = "AORTIC STENOSIS"
+        elif any(k in low for k in ["pulmonary embolism", "pe", "i26.99", "embolus", "ctpa"]):
+            prompt = "Macro anatomical cross-section focusing exclusively on the human pulmonary artery showing localized embolism blockage. Clean minimalist flat vector art, precise biological geometry, pastel tones, primary background color #F7FAFC, embolism detail color #E53E3E. Pure visual diagram, label-free, typography-free, alphabet-free vector shapes, solid graphic contours."
+            title = "Macro Cross-Section: Pulmonary Artery Thrombus Embolus"
+            tag = "PULMONARY EMBOLISM"
+        elif any(k in low for k in ["appendicitis", "k35.80", "appendix", "mcburney"]):
+            prompt = "Macro anatomical cross-section focusing exclusively on the human appendix showing acute suppurative inflammation. Clean minimalist flat vector art, precise biological geometry, pastel tones, primary background color #F7FAFC, inflammation detail color #E53E3E. Pure visual diagram, label-free, typography-free, alphabet-free vector shapes, solid graphic contours."
+            title = "Macro Cross-Section: Acute Appendicitis Luminal Edema"
+            tag = "ACUTE APPENDICITIS"
+        elif any(k in low for k in ["colon", "rectal", "colorectal", "intestinal", "bowel", "cancer", "carcinoma", "adenocarcinoma", "c18.9", "καρκιν", "εντερ", "ογκος", "αδενοκαρκιν"]):
+            prompt = "Macro anatomical cross-section focusing exclusively on human colon bowel lumen showing exophytic intestinal colorectal adenocarcinoma tumoral mass obstructing colon lumen. Clean minimalist flat vector art, precise biological geometry, pastel tones, primary background color #F7FAFC, colon mucosa color #F43F5E, tumoral mass color #991B1B, vascular arterial red color #DC2626. Pure visual diagram, label-free, typography-free, alphabet-free vector shapes, solid graphic contours."
+            title = "Macro Cross-Section: Colorectal Adenocarcinoma & Intestinal Lumen Stenosis"
+            tag = "COLON CANCER (C18.9)"
+        elif any(k in low for k in ["masticatory", "myalgia", "m79.1", "masseter", "temporalis", "tmj", "jaw", "bruxism"]):
+            prompt = "Macro anatomical cross-section focusing exclusively on human masseter and temporalis jaw muscle groups showing myofascial strain focus points. Clean minimalist flat vector art, precise biological geometry, pastel tones, primary background color #F7FAFC, masseter muscle color #E53E3E, temporalis muscle color #FCA5A5, jaw bone contour color #CBD5E1. Pure visual diagram, label-free, typography-free, alphabet-free vector shapes, solid graphic contours."
+            title = "Macro Cross-Section: Masticatory Myofascial Strain"
             tag = "MASTICATORY MYALGIA"
         elif "hernia" in low or "spine" in low or "disc" in low or "px-8811" in low:
-            prompt = "Create a simple flat vector medical illustration of a human lumbar spine showing an L5-S1 herniated disc pressing on a nerve root, suitable for patient education, background color hex #F7FAFC, nerve color hex #F59E0B, disc detail color hex #E53E3E."
-            title = "Understanding Lumbar Disc Herniation (L5-S1 Nerve Compression)"
+            prompt = "Macro anatomical cross-section focusing exclusively on L5-S1 lumbar spine segment showing herniated intervertebral disc compressing spinal nerve root. Clean minimalist flat vector art, precise biological geometry, pastel tones, primary background color #F7FAFC, vertebral bone color #E2E8F0, herniated disc color #E53E3E, nerve root color #F59E0B. Pure visual diagram, label-free, typography-free, alphabet-free vector shapes, solid graphic contours."
+            title = "Macro Cross-Section: Lumbar Disc Herniation (L5-S1 Nerve Compression)"
             tag = "L5-S1 HERNIATION"
         elif "diab" in low or "glucose" in low or "neuropathy" in low or "px-8812" in low:
-            prompt = "Create a simple flat vector medical illustration of peripheral nerve fibers in the foot showing blood flow and glucose impact, suitable for patient education, background color hex #F7FAFC, vascular color hex #3182CE, nerve axon color hex #F59E0B."
-            title = "Understanding Type 2 Diabetes & Peripheral Nerve Care"
+            prompt = "Macro anatomical cross-section focusing exclusively on peripheral nerve fiber bundle showing axonal swelling and microvascular impairment. Clean minimalist flat vector art, precise biological geometry, pastel tones, primary background color #F7FAFC, nerve fiber color #F59E0B, capillary vessel color #E53E3E. Pure visual diagram, label-free, typography-free, alphabet-free vector shapes, solid graphic contours."
+            title = "Macro Cross-Section: Type 2 Diabetes & Peripheral Nerve Fiber"
             tag = "T2D NEUROPATHY"
         elif "copd" in low or "emphysema" in low or "lung" in low or "px-8813" in low:
-            prompt = "Create a simple flat vector medical illustration of human bronchial airways and alveoli showing airflow in COPD emphysema, suitable for patient education, background color hex #F7FAFC, pulmonary blue color hex #38BDF8, tissue accent color hex #F97316."
-            title = "Understanding COPD & Airway Emphysema"
+            prompt = "Macro anatomical cross-section focusing exclusively on bronchial airway terminal unit and hyperinflated emphysematous alveoli. Clean minimalist flat vector art, precise biological geometry, pastel tones, primary background color #F7FAFC, bronchial tissue color #38BDF8, destroyed alveolar septa color #F97316. Pure visual diagram, label-free, typography-free, alphabet-free vector shapes, solid graphic contours."
+            title = "Macro Cross-Section: COPD Terminal Airway & Emphysema"
             tag = "COPD EXACERBATION"
         elif "cad" in low or "angina" in low or "heart" in low or "px-8810" in low:
-            prompt = "Create a simple flat vector medical illustration of a human heart showing a blocked coronary artery, suitable for patient education, background color hex #F7FAFC, organ detail color hex #E53E3E, vascular blue color hex #3182CE."
-            title = "Understanding Coronary Artery Disease & Arterial Blockage"
+            prompt = "Macro anatomical cross-section focusing exclusively on left anterior descending LAD coronary artery showing 85 percent atherosclerotic plaque occlusion. Clean minimalist flat vector art, precise biological geometry, pastel tones, primary background color #F7FAFC, arterial wall color #E53E3E, lipid plaque occlusion color #F59E0B, vascular lumen color #3182CE. Pure visual diagram, label-free, typography-free, alphabet-free vector shapes, solid graphic contours."
+            title = "Macro Cross-Section: LAD Coronary Artery Plaque Occlusion"
             tag = "LAD BLOCKAGE (85%)"
         else:
             short_diag = clean_text[:35] if clean_text else "Clinical Evaluation"
-            prompt = f"Create a simple flat vector medical illustration representing {short_diag}, suitable for patient education, background color hex #F7FAFC, organ detail color hex #E53E3E."
-            title = f"Understanding {short_diag}"
+            prompt = f"Macro anatomical cross-section focusing exclusively on human organ system showing focal lesion for {short_diag}. Clean minimalist flat vector art, precise biological geometry, pastel tones, primary background color #F7FAFC, tissue color #E53E3E, vascular blue color #3182CE. Pure visual diagram, label-free, typography-free, alphabet-free vector shapes, solid graphic contours."
+            title = f"Macro Cross-Section: {short_diag}"
             tag = "CLINICAL DIAGRAM"
 
 
@@ -464,7 +550,14 @@ class AzureServiceClients:
         icd_match = re.search(r'ICD-10:\s*([A-Z]\d{2}(?:\.\d{1,3})?)', clean_text, re.I)
         diag_match = re.search(r'(?:Primary Diagnosis|Diagnosis)[:\s]+([^\n\.\(]+)', clean_text, re.I)
 
-        if any(k in low for k in ["masticatory", "myalgia", "m79.1", "masseter", "temporalis", "tmj", "jaw", "bruxism"]):
+        if any(k in low for k in ["colon", "rectal", "colorectal", "intestinal", "bowel", "cancer", "carcinoma", "adenocarcinoma", "c18.9", "καρκιν", "εντερ", "ογκος", "αδενοκαρκιν"]):
+            entities = [
+                {"text": "Colorectal Adenocarcinoma (Colon Cancer)", "category": "Condition", "umls_cui": "C0009375", "icd10": "C18.9", "confidence": 0.99},
+                {"text": "Intestinal Tumoral Mass & Stenosis", "category": "Finding", "umls_cui": "C0021831", "icd10": "K63.8", "confidence": 0.97},
+                {"text": "Change in Bowel Habits & Hematochezia", "category": "Finding", "umls_cui": "C0000737", "icd10": "R19.4", "confidence": 0.96},
+                {"text": "Elevated Carcinoembryonic Antigen (CEA)", "category": "Lab Finding", "umls_cui": "C0007096", "icd10": "Z01.89", "confidence": 0.95}
+            ]
+        elif any(k in low for k in ["masticatory", "myalgia", "m79.1", "masseter", "temporalis", "tmj", "jaw", "bruxism"]):
             entities = [
                 {"text": "Masticatory Myalgia (Masseter Myofascial Strain)", "category": "Condition", "umls_cui": "C0221166", "icd10": "M79.1", "confidence": 0.99},
                 {"text": "Temporalis & Masseter Muscle Tenderness", "category": "Finding", "umls_cui": "C0026848", "icd10": "M79.18", "confidence": 0.97},
@@ -535,8 +628,33 @@ class AzureServiceClients:
                 {"text": "Physician Consultation Recommended", "category": "Management", "umls_cui": "C0009440", "icd10": "Z51.89", "confidence": 0.94}
             ]
 
+        # Assertion & Negation Detection (e.g. "no cough", "denies dyspnea", "without fever")
+        negated_terms = []
+        if re.search(r'\b(no|without|denies|negative for|absent)\s+(cough|fever|dyspnea|chest pain|nausea|headache|edema)\b', low):
+            neg_match = re.search(r'\b(no|without|denies|negative for|absent)\s+([a-z\s]+)\b', low)
+            symptom_name = neg_match.group(2).strip().title() if neg_match else "Symptom"
+            negated_terms.append({
+                "text": symptom_name,
+                "category": "Symptom",
+                "assertion": "Negated",
+                "is_negated": True,
+                "confidence": 0.98,
+                "umls_cui": "C0003123",
+                "icd10": "R05.9"
+            })
+
+        # Attach assertion status to positive entities as "Confirmed / Present"
+        for ent in entities:
+            ent["assertion"] = "Confirmed"
+            ent["is_negated"] = False
+
+        if negated_terms:
+            entities.extend(negated_terms)
+
         return {
             "entities": entities,
+            "negated_entities": negated_terms,
+            "assertion_summary": f"Detected {len(entities) - len(negated_terms)} confirmed clinical entities and {len(negated_terms)} negated findings.",
             "relations": [
                 {"source": entities[0]["text"], "target": entities[1]["text"], "type": "associated_with"}
             ]

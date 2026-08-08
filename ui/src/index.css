@@ -97,6 +97,31 @@
   border-bottom: 1px solid rgba(56,100,185,0.15);
 }
 
+/* ─── Clinical Input Controls ─────────────────────────────────────────────────── */
+.clinical-input {
+  width: 100%;
+  height: 42px;
+  padding: 8px 14px !important;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 12px;
+  color: #f8fafc;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.clinical-input:focus {
+  border-color: #00F2FE !important;
+  background: rgba(15, 23, 42, 0.95);
+  box-shadow: 0 0 18px rgba(0, 242, 254, 0.35);
+}
+
+.clinical-input::placeholder {
+  color: rgba(148, 163, 184, 0.5);
+}
+
 /* ─── Status Dots ────────────────────────────────────────────────────────────── */
 .status-dot-live {
   position: relative;
@@ -536,4 +561,54 @@
   font-family: 'JetBrains Mono', monospace;
   font-weight: 700; font-size: 13px;
   color: #60a5fa;
+}
+
+/* ─── 3D Holographic HUD Perspective & Animations ─────────────────────────── */
+.hud-perspective-container {
+  perspective: 1000px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.anatomical-card {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease-out;
+}
+
+.hud-ring-outer {
+  animation: spin-clockwise 12s linear infinite;
+  border: 1px dashed rgba(0, 242, 254, 0.4);
+  filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.5));
+}
+
+.hud-ring-inner {
+  animation: spin-counter-clockwise 8s linear infinite;
+  border: 1px double rgba(0, 242, 254, 0.3);
+}
+
+.hologram-image {
+  filter: drop-shadow(0 0 15px rgba(0, 242, 254, 0.6));
+  animation: pulse-glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes spin-clockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-counter-clockwise {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes pulse-glow {
+  0% {
+    filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.4));
+    opacity: 0.95;
+  }
+  100% {
+    filter: drop-shadow(0 0 20px rgba(0, 242, 254, 0.8));
+    opacity: 1;
+  }
 }

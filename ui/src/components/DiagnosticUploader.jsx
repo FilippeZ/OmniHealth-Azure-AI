@@ -39,34 +39,51 @@ const PRESETS = [
     label: 'PX-8888: Masticatory Myalgia',
     notes: 'PATIENT: Zygouris Filippos-Paraskevas | AGE: 24 | ADMISSION: 2026-08-07. Primary Diagnosis: Masticatory Myalgia (ICD-10: M79.1). Clinical summary: Localized pain and fatigue in muscles of mastication (masseter and temporalis). Prolonged static posture, high cognitive load, bruxism.',
   },
+  {
+    id: 'PX-8820', name: 'Maria Karrathana', tag: 'COLON CANCER',
+    badge: 'badge-rose',
+    label: 'PX-8820: Colorectal Adenocarcinoma (Colon Cancer)',
+    notes: 'PATIENT: Karrathana Maria | AGE: 59 | ADMISSION: 2026-08-08. Clinical summary: Colonoscopy and CT abdomen reveal exophytic 3.4 cm intestinal mass in descending colon lumen causing partial bowel stenosis. Biopsy confirms Colorectal Adenocarcinoma (ICD-10: C18.9, UMLS: C0009375). Elevated Carcinoembryonic Antigen (CEA 18.4 ng/mL).',
+  },
 ];
 
 export default function DiagnosticUploader({ onScanUploaded }) {
-  const [patientId, setPatientId] = useState('PX-8810');
-  const [patientName, setPatientName] = useState('Nikos Mavros');
-  const [clinicalNotes, setClinicalNotes] = useState(PRESETS[0].notes);
+  const [patientId, setPatientId] = useState('');
+  const [patientName, setPatientName] = useState('');
+  const [clinicalNotes, setClinicalNotes] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
-  const [activePreset, setActivePreset] = useState('PX-8810');
+  const [activePreset, setActivePreset] = useState(null);
 
   const handlePreset = (p) => {
     setPatientId(p.id);
     setPatientName(p.name);
     setClinicalNotes(p.notes);
     setActivePreset(p.id);
+    setSelectedFile(null);
     setUploadSuccess(false);
   };
 
   const handleFileChange = (e) => {
-    if (e.target.files?.[0]) setSelectedFile(e.target.files[0]);
+    if (e.target.files?.[0]) {
+      setSelectedFile(e.target.files[0]);
+      setActivePreset(null);
+      if (!patientId || activePreset) setPatientId('');
+      if (!patientName || activePreset) setPatientName('');
+    }
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
-    if (e.dataTransfer.files?.[0]) setSelectedFile(e.dataTransfer.files[0]);
+    if (e.dataTransfer.files?.[0]) {
+      setSelectedFile(e.dataTransfer.files[0]);
+      setActivePreset(null);
+      if (!patientId || activePreset) setPatientId('');
+      if (!patientName || activePreset) setPatientName('');
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -74,14 +91,16 @@ export default function DiagnosticUploader({ onScanUploaded }) {
     setIsSubmitting(true);
     try {
       const formData = new FormData();
-      formData.append('patient_id', patientId);
-      formData.append('patient_name', patientName);
+      formData.append('patient_id', patientId.trim());
+      formData.append('patient_name', patientName.trim());
       formData.append('clinical_notes', clinicalNotes);
       if (selectedFile) formData.append('file', selectedFile);
 
-      await uploadDiagnosticScan(formData);
+      const response = await uploadDiagnosticScan(formData);
+      const resPid = response?.patient_id || patientId.trim() || 'PX-8890';
+      const resRecord = response?.patient_record || null;
       setUploadSuccess(true);
-      setTimeout(() => onScanUploaded(patientId), 700);
+      setTimeout(() => onScanUploaded(resPid, resRecord), 700);
     } catch (err) {
       console.error(err);
       alert('Failed to upload diagnostic record. Please check the backend connection.');
@@ -151,33 +170,39 @@ export default function DiagnosticUploader({ onScanUploaded }) {
           {/* Patient ID + Name */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-slide-in-up" style={{ animationDelay: '100ms' }}>
             <div className="glass-card p-4">
-              <label
-                className="block text-[10px] font-bold uppercase tracking-widest mb-2"
-                style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-muted)' }}
-              >
-                PATIENT ID / RECORD CODE
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label
+                  className="block text-[10px] font-bold uppercase tracking-widest"
+                  style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-muted)' }}
+                >
+                  PATIENT ID / RECORD CODE
+                </label>
+                <span className="text-[9px] font-mono text-cyan-400 font-bold">OPTIONAL · AUTO-GENERATE</span>
+              </div>
               <input
                 type="text"
                 value={patientId}
                 onChange={(e) => setPatientId(e.target.value)}
-                required
-                className="clinical-input"
+                placeholder="Auto-generated if empty (e.g. PX-8895)..."
+                className="clinical-input font-mono"
                 id="patient-id-input"
               />
             </div>
             <div className="glass-card p-4">
-              <label
-                className="block text-[10px] font-bold uppercase tracking-widest mb-2"
-                style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-muted)' }}
-              >
-                PATIENT FULL NAME
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label
+                  className="block text-[10px] font-bold uppercase tracking-widest"
+                  style={{ fontFamily: "'JetBrains Mono'", color: 'var(--text-muted)' }}
+                >
+                  PATIENT FULL NAME
+                </label>
+                <span className="text-[9px] font-mono text-cyan-400 font-bold">AUTO-DETECT (MISTRAL OCR 4.0)</span>
+              </div>
               <input
                 type="text"
                 value={patientName}
                 onChange={(e) => setPatientName(e.target.value)}
-                required
+                placeholder="Leave empty to auto-detect from PDF scan..."
                 className="clinical-input"
                 id="patient-name-input"
               />
@@ -197,7 +222,13 @@ export default function DiagnosticUploader({ onScanUploaded }) {
             </label>
             <div
               className={`dropzone relative ${isDragging ? 'dragging' : ''}`}
-              style={{ padding: '36px 24px', borderRadius: '16px' }}
+              style={{
+                padding: '36px 24px',
+                borderRadius: '16px',
+                border: '2px dashed #00F2FE',
+                boxShadow: '0 0 20px rgba(0, 242, 254, 0.15)',
+                background: 'rgba(0, 242, 254, 0.03)'
+              }}
               onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
               onDragLeave={() => setIsDragging(false)}
               onDrop={handleDrop}
@@ -271,6 +302,34 @@ export default function DiagnosticUploader({ onScanUploaded }) {
             />
           </div>
 
+          {/* Visual Progress Stepper during processing */}
+          {isSubmitting && (
+            <div className="glass-card p-5 border-cyan-500/30 animate-fade-in space-y-3">
+              <div className="flex items-center justify-between text-xs font-mono font-bold text-cyan-400">
+                <span>MULTI-AGENT CLINICAL PIPELINE EXECUTING...</span>
+                <span>STEP 4 OF 4</span>
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                <div className="p-2.5 rounded-lg bg-purple-500/20 border border-purple-400/40 text-center">
+                  <span className="text-[10px] font-mono font-bold text-purple-300 block">STEP 1</span>
+                  <span className="text-xs font-bold text-white block mt-0.5">Intake</span>
+                </div>
+                <div className="p-2.5 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-center">
+                  <span className="text-[10px] font-mono font-bold text-emerald-300 block">STEP 2</span>
+                  <span className="text-xs font-bold text-white block mt-0.5">Mistral OCR</span>
+                </div>
+                <div className="p-2.5 rounded-lg bg-blue-500/20 border border-blue-400/40 text-center">
+                  <span className="text-[10px] font-mono font-bold text-blue-300 block">STEP 3</span>
+                  <span className="text-xs font-bold text-white block mt-0.5">Azure TA4H</span>
+                </div>
+                <div className="p-2.5 rounded-lg bg-rose-500/20 border border-rose-400/40 text-center animate-pulse">
+                  <span className="text-[10px] font-mono font-bold text-rose-300 block">STEP 4</span>
+                  <span className="text-xs font-bold text-white block mt-0.5">FLUX Visual</span>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Centered Doctor Submit Button */}
           <div className="animate-slide-in-up text-center pt-2" style={{ animationDelay: '250ms' }}>
             <button
@@ -285,7 +344,7 @@ export default function DiagnosticUploader({ onScanUploaded }) {
                   <span
                     className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"
                   />
-                  PROCESSING CLINICAL DOCUMENT...
+                  PROCESSING PIPELINE (OCR → TA4H → FLUX)...
                 </>
               ) : uploadSuccess ? (
                 <>
