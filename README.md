@@ -225,3 +225,34 @@ npm run dev
 ```
 
 Open **`http://localhost:5173`** in your browser to launch the OmniHealth AI Command Center!
+
+---
+
+## 🌐 8. Azure API Communication & Cloud Integration Architecture
+
+The backend cloud communication layer is encapsulated within the **`AzureServiceClients`** class in `core/azure_clients.py`, connecting the local FastAPI application to Microsoft Azure AI Services:
+
+### 🔌 1. Authentication & Endpoint Resolution
+At startup, `AzureServiceClients` dynamically loads environment credentials from `.env` and configures production REST targets:
+- **`AZURE_AGENT_ENDPOINT`**: Azure AI Foundry DeepSeek-V3.2-Speciale `myagent` orchestration endpoint.
+- **`MISTRAL_OCR_ENDPOINT`**: Microsoft Foundry Mistral Document AI layout parser (`mistral-document-ai-2512`).
+- **`FLUX_PRO_ENDPOINT`**: Black Forest Labs FLUX.2-pro text-to-image generator (`blackforestlabs/v1/flux-2-pro`).
+- **`AZURE_CONTENT_SAFETY_ENDPOINT`**: Content Safety automated medical compliance filter.
+- **`AZURE_SEARCH_ENDPOINT`**: Azure AI Search vector & hybrid index engine storing AHA guidelines.
+- **`AZURE_COSMOS_ENDPOINT`**: Azure Cosmos DB NoSQL account for state serialization & history.
+
+### 📡 2. REST Protocol & Payload Execution
+- **DeepSeek 3.2 Reasoning Agent (`_call_agent`)**:
+  - Issues HTTP `POST` requests using Python `urllib.request` with `api-key` and `Bearer` authorization headers.
+  - Features robust response sanitizers that strip Markdown codeblock fences (````json ... ````) and repair malformed JSON trailing commas.
+- **FLUX.2-pro Text-to-Image Engine (`_call_flux_pro_api`)**:
+  - Dispatches `POST` JSON payloads containing positive design constraints and explicit hex color codes (`color #F7FAFC`) to `FLUX_PRO_ENDPOINT`.
+  - Includes a zero-downtime local Pillow vector fallback (`_render_canvas_illustration`) to guarantee 100% diagram availability if remote network latency exceeds limits.
+- **Mistral OCR Layout Engine (`run_legacy_ocr_analysis`)**:
+  - Transmits base64 encoded document payloads to `MISTRAL_OCR_ENDPOINT` to extract structured Markdown and bounding box (`bbox`) pixel coordinates.
+- **Azure Text Analytics for Health (`run_text_analytics_health`)**:
+  - Runs clinical entity extraction, mapping diagnoses to **ICD-10-CM** (`C18.9`, `F41.1`, `F32.2`, `C50.9`, `I21.0`, `I63.50`) and **UMLS CUIs** (`C0009375`, `C0003467`), returning structured clinical arrays.
+
+### 🔄 3. In-Memory State & Frontend Synchronization (`core/api.py`)
+FastAPI endpoints (`/api/upload`, `/api/patients`, `/api/patient-history`, `/api/system-status`) bind directly to `AzureServiceClients`. Uploaded patient documents trigger synchronous NLP entity extraction and FLUX diagram rendering, updating global module-scoped memory (`patient_database` & `history_db`) for zero-latency UI re-rendering in the React dashboard.
+
