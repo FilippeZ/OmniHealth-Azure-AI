@@ -256,3 +256,25 @@ At startup, `AzureServiceClients` dynamically loads environment credentials from
 ### 🔄 3. In-Memory State & Frontend Synchronization (`core/api.py`)
 FastAPI endpoints (`/api/upload`, `/api/patients`, `/api/patient-history`, `/api/system-status`) bind directly to `AzureServiceClients`. Uploaded patient documents trigger synchronous NLP entity extraction and FLUX diagram rendering, updating global module-scoped memory (`patient_database` & `history_db`) for zero-latency UI re-rendering in the React dashboard.
 
+---
+
+## 🎬 9. Creator Video Guides & Architectural Foundations
+
+The engineering design of OmniHealth AI is backed by two technical video tutorials demonstrating the core Azure AI architectures implemented in this repository:
+
+### 1. 🎥 ["Unveiling the Power of Artificial Intelligence and Machine Learning via Azure Services"](https://youtu.be/aU262LfJNjw?si=pGN2bZlx97sxLqcS)
+- **Watch on YouTube**: [https://youtu.be/aU262LfJNjw?si=pGN2bZlx97sxLqcS](https://youtu.be/aU262LfJNjw?si=pGN2bZlx97sxLqcS)
+- **Architectural Contribution to OmniHealth AI**:
+  - **Deterministic Rules vs. Machine Learning**: Contrasts traditional rule-based ("if-then") software against data-driven machine learning models trained on features and labels. This informed the reasoning architecture of our **Lead Medical Orchestrator (`DeepSeek-V3.2-Speciale`)**, allowing it to dynamically adapt to variable clinical note structures.
+  - **Standard Read OCR vs. Asynchronous Multimodal Layout Parsing**: Explains why simple OCR libraries fail on complex multi-column clinical PDFs and low-resolution handwritten doctor notes, justifying the deployment of the specialized **Legacy Records Agent (`mistral-document-ai-2512`)** on Microsoft Foundry.
+  - **Computer Vision & Bounding Box Coordinates**: Demonstrates Vision Studio dense captioning and object detection returning pixel bounding coordinates (`bboxes`). This directly powers the **Legacy Records Agent** bounding box extraction and the interactive **3D Holographic Anatomical HUD Scope**.
+
+### 2. 🎥 ["Advanced AI-Driven Chest X-Ray Diagnostics via Azure"](https://youtu.be/lkFHiRA9CgM?si=zDysMnjyCmqaV1fu)
+- **Watch on YouTube**: [https://youtu.be/lkFHiRA9CgM?si=zDysMnjyCmqaV1fu](https://youtu.be/lkFHiRA9CgM?si=zDysMnjyCmqaV1fu)
+- **Architectural Contribution to OmniHealth AI**:
+  - **Human Oversight & EU AI Act Article 14 Compliance**: Emphasizes that clinical AI must act as a diagnostic co-pilot augmenting speed and accuracy without replacing attending physician authority. This philosophy forms the bedrock of our **Supervisory HITL Verification Panel**, enforcing mandatory digital authorization checkpoints (`safety-chk-PX-XXXX`).
+  - **Text Analytics for Health (TA4H) Ingestion**: Demonstrates unstructured text parsing, clinical Named Entity Recognition (NER), and automatic coding to international ontologies (**ICD-10-CM** and **UMLS CUIs**), implemented directly in our **Clinical NLP Agent**.
+  - **Relation Extraction & Negation Context Detection**: Explores dosage-to-drug mapping and syntactic negation detection (e.g., recognizing "denies shortness of breath" or "no weight loss"), preventing misclassifications in the **OmniHealth AI Pipeline**.
+  - **RAG & Azure AI Search Synergy**: Illustrates real-time Retrieval-Augmented Generation (RAG) using Azure AI Search vector indices, mirroring how the **Lead Medical Orchestrator** retrieves AHA/NCCN guidelines to synthesize patient education summaries.
+
+
