@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="ui/public/logo.png" alt="OmniHealth Azure AI Logo" width="340" style="filter: drop-shadow(0 15px 35px rgba(0, 242, 254, 0.4)); margin-bottom: 10px;" />
+  <img src="ui/public/omnihealth_official_logo.png" alt="OmniHealth Azure AI Official Logo" width="580" style="border-radius: 16px; box-shadow: 0 15px 40px rgba(0, 242, 254, 0.4); margin-bottom: 20px; border: 1px solid rgba(0, 242, 254, 0.3);" />
 
   # 🚀 OmniHealth Azure AI — Multi-Agent Clinical Diagnostic Platform
   ### Production-Grade Architecture & Implementation Blueprint — Version 2.0 (Rocket Flow & 6 Use Cases Edition)
